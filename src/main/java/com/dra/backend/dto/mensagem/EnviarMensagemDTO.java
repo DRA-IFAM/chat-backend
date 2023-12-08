@@ -3,11 +3,13 @@ package com.dra.backend.dto.mensagem;
 import lombok.Data;
 
 @Data
-public class EnviarMensgemDTO {
+public class EnviarMensagemDTO {
+    private String assunto;
     private String conteudo;
     private String receptor;
 
-    public EnviarMensgemDTO(String conteudo, String receptor) {
+    public EnviarMensagemDTO(String assunto, String conteudo, String receptor) {
+        this.assunto = assunto;
         this.conteudo = conteudo;
         this.receptor = receptor;
     }

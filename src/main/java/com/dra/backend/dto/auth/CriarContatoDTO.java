@@ -1,5 +1,7 @@
 package com.dra.backend.dto.auth;
 
+import com.dra.backend.models.entities.Contato;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,27 +12,15 @@ public class CriarContatoDTO {
     private String email;
     private String senha;
     private String telefone;
-    private String endereço;
+    private String endereco;
     private String bairro;
     private String cidade;
     private String estado;
 
-    private CriarContatoDTO(String nome, String email, String senha, String telefone, String endereço, String bairro,
-            String cidade, String estado) {
-        this.setNome(nome);
-        this.setEmail(email);
-        this.setSenha(senha);
-        this.setTelefone(telefone);
-        this.setEndereço(endereço);
-        this.setBairro(bairro);
-        this.setCidade(cidade);
-        this.setEstado(estado);
+    public static Contato from(CriarContatoDTO contato) {
+        return new Contato(contato.getNome(), contato.getEmail(), contato.getSenha(), contato.getTelefone(),
+                contato.getEndereco(), contato.getBairro(), contato.getCidade(), contato.getEstado());
 
-    }
-
-    public static CriarContatoDTO from(String nome, String email, String senha, String telefone, String endereço,
-            String bairro, String cidade, String estado) {
-        return new CriarContatoDTO(nome, email, senha, telefone, endereço, bairro, cidade, estado);
     }
 
     public String validateFields() {
@@ -40,14 +30,6 @@ public class CriarContatoDTO {
         if (nome.isEmpty() || email.isEmpty() || senha.isEmpty()) {
             return "Dados inválidos. Por favor, tente novamente.";
         }
-        return null;
-    }
-
-    public Object getUsername() {
-        return null;
-    }
-
-    public Object getPassword() {
         return null;
     }
 

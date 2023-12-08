@@ -1,6 +1,7 @@
 package com.dra.backend.services;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,23 +20,27 @@ public class MensagemService {
     private ContatoRepository contatoRepository;
 
     public List<Mensagem> verMensagens(String idEmissor) {
-        Contato emissor = contatoRepository.findContatoById(idEmissor);
-        return mensagemRepository.findByEmissor(emissor);
+        Optional<Contato> emissor = contatoRepository.findById(idEmissor);
+        if (emissor.isEmpty()) {
+            return null;
+        }
+        List<Mensagem> mensagens = mensagemRepository.findByEmissor(emissor.get());
+        return mensagens;
     }
 
-    public Mensagem enviarMensagem(String idEmissor, String idRecepetor, String conteudo) {
-        Mensagem mensagem = new Mensagem();
-        mensagem.setConteudo(conteudo);
-        mensagem.setEmissor(contatoRepository.findContatoById(idEmissor));
-        mensagem.setReceptor(contatoRepository.findByEmail(idRecepetor));
+    public Mensagem enviarMensagem(String idEmissor, String idRecepetor, String assunto, String conteudo) {
+        Optional<Contato> emissor = contatoRepository.findById(idEmissor);
+        Optional<Contato> receptor = contatoRepository.findById(idRecepetor);
+        System.out.println(emissor);
+        Mensagem mensagem = new Mensagem(emissor.get(), receptor.get(), assunto, conteudo);
         return mensagemRepository.save(mensagem);
     }
 
-    public Mensagem verMensagem(String idEmissor, String idReceptor) {
-        Contato emissor = contatoRepository.findContatoById(idEmissor);
-        Contato receptor = contatoRepository.findContatoById(idReceptor);
-        Mensagem mensagem = mensagemRepository.findByReceptorAndEmissor(receptor, emissor);
-        return mensagem;
+    public List<Mensagem> verMensagens(String idEmissor, String idReceptor) {
+        Optional<Contato> emissor = contatoRepository.findById(idEmissor);
+        Optional<Contato> receptor = contatoRepository.findById(idReceptor);
+        List<Mensagem> mensagens = mensagemRepository.findAllByReceptorAndEmissor(receptor.get(), emissor.get());
+        return mensagens;
     }
 
 }

@@ -2,6 +2,7 @@ package com.dra.backend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import java.util.Optional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,16 +31,15 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/criar")
-    public ResponseEntity<String> createUser(@RequestBody CriarContatoDTO data) {
-        String validateDTO = data.validateFields();
+    public ResponseEntity<String> createUser(@RequestBody CriarContatoDTO contatoDTO) {
+        String validateDTO = contatoDTO.validateFields();
         if (validateDTO != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validateDTO);
         }
         try {
-            Contato user = this.authService.register(
-                    CriarContatoDTO.from(data.getNome(), data.getEmail(), data.getSenha(), data.getTelefone(),
-                            data.getEndereço(), data.getBairro(), data.getCidade(), data.getEstado()));
-            if (user == null) {
+            Contato contato = CriarContatoDTO.from(contatoDTO);
+            Optional<Contato> user = this.authService.register(contato);
+            if (user.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário já existe.");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body("Usuário criado com sucesso.");
