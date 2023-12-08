@@ -16,21 +16,31 @@ import com.dra.backend.models.entities.Contato;
 import com.dra.backend.models.responses.ListarContato;
 import com.dra.backend.services.ContatoService;
 
-@RequestMapping("/api")
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Contato")
+@RequestMapping("/api/contato")
 @RestController
 public class ContatoController {
     @Autowired
     ContatoService contatoService;
 
-    @GetMapping("/contato")
-    ResponseEntity<List<ListarContato>> getContatos() {
+    @GetMapping
+    @Operation(summary = "Lista todos os contatos.")
+    @ApiResponse(responseCode = "200", description = "Contatos listados com sucesso.")
+    ResponseEntity<List<ListarContato>> listarContatos() {
         List<ListarContato> contatos = contatoService.listarContatos();
         return ResponseEntity.ok(contatos);
 
     }
 
-    @GetMapping("/contato/{id}")
-    ResponseEntity<ListarContato> getContatoById(@PathVariable String id) {
+    @GetMapping("/{id}")
+    @Operation(summary = "Lista um contato pelo id.")
+    @ApiResponse(responseCode = "200", description = "Contato listado com sucesso.")
+    @ApiResponse(responseCode = "404", description = "Contato não encontrado.")
+    ResponseEntity<ListarContato> listarContatoPorId(@PathVariable String id) {
         Optional<ListarContato> contato = contatoService.listarContato(id);
         if (!contato.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -38,8 +48,11 @@ public class ContatoController {
         return ResponseEntity.ok(contato.get());
     }
 
-    @DeleteMapping("/contato/{id}")
-    ResponseEntity<Contato> deleteContato(@PathVariable String id) {
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Deleta um contato pelo id.")
+    @ApiResponse(responseCode = "200", description = "Contato deletado com sucesso.")
+    @ApiResponse(responseCode = "404", description = "Contato não encontrado.")
+    ResponseEntity<Contato> deletarContato(@PathVariable String id) {
         Optional<Contato> contato = contatoService.deletarContato(id);
         if (!contato.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);

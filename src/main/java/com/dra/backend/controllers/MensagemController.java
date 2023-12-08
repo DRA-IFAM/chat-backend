@@ -11,7 +11,12 @@ import com.dra.backend.models.entities.Mensagem;
 import com.dra.backend.services.JwtService;
 import com.dra.backend.services.MensagemService;
 
-@RequestMapping("/api")
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Mensagem")
+@RequestMapping("/api/mensagem")
 @RestController
 public class MensagemController {
 
@@ -21,8 +26,10 @@ public class MensagemController {
         @Autowired
         MensagemService mensagemService;
 
-        @GetMapping("/mensagem")
-        public ResponseEntity<List<MensagemDTO>> getMinhasMensagens(@RequestHeader String Authorization) {
+        @GetMapping
+        @Operation(summary = "Lista todas as mensagens.")
+        @ApiResponse(responseCode = "200", description = "Mensagens listadas com sucesso.")
+        ResponseEntity<List<MensagemDTO>> getMinhasMensagens(@RequestHeader String Authorization) {
                 String idEmissor = this.jwtService.validateToken(Authorization);
                 List<Mensagem> mensagens = this.mensagemService.verMensagens(idEmissor);
                 List<MensagemDTO> mensagensDTO = mensagens.stream().map(mensagem -> new MensagemDTO(mensagem)).toList();
@@ -30,8 +37,10 @@ public class MensagemController {
 
         }
 
-        @GetMapping("/mensagem/{idReceptor}")
-        public ResponseEntity<List<MensagemDTO>> getMensagemEnviadaPara(@PathVariable String idReceptor,
+        @GetMapping("/{idReceptor}")
+        @Operation(summary = "Lista todas as mensagens enviadas para um usuário.")
+        @ApiResponse(responseCode = "200", description = "Mensagens listadas com sucesso.")
+        ResponseEntity<List<MensagemDTO>> getMensagemEnviadaPara(@PathVariable String idReceptor,
                         @RequestHeader String Authorization) {
                 String idEmissor = this.jwtService.validateToken(Authorization);
                 List<Mensagem> mensagens = this.mensagemService.verMensagens(idEmissor, idReceptor);
@@ -39,7 +48,9 @@ public class MensagemController {
                 return ResponseEntity.ok(mensagensDTO);
         }
 
-        @PostMapping("/mensagem")
+        @PostMapping
+        @Operation(summary = "Envia uma mensagem para um usuário.")
+        @ApiResponse(responseCode = "200", description = "Mensagem enviada com sucesso.")
         ResponseEntity<MensagemDTO> criarMensagem(@RequestBody EnviarMensagemDTO dtoMensagem,
                         @RequestHeader String Authorization) {
                 String idEmissor = this.jwtService.validateToken(Authorization);

@@ -14,7 +14,7 @@ public class LogarContatoDTO {
         this.setSenha(senha);
     }
 
-    public static LogarContatoDTO from(String username, String password) {
+    static LogarContatoDTO from(String username, String password) {
         return new LogarContatoDTO(username, password);
     }
 

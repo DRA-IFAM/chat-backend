@@ -8,7 +8,7 @@ public class EnviarMensagemDTO {
     private String conteudo;
     private String receptor;
 
-    public EnviarMensagemDTO(String assunto, String conteudo, String receptor) {
+     EnviarMensagemDTO(String assunto, String conteudo, String receptor) {
         this.assunto = assunto;
         this.conteudo = conteudo;
         this.receptor = receptor;
