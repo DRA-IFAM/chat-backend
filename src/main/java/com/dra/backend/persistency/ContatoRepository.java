@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.dra.backend.models.entities.Contato;
 
 public interface ContatoRepository extends JpaRepository<Contato, String> {
-    UserDetails findByEmail(String email);
+    Contato findByEmail(String email);
 
     Contato findContatoById(String id);
 }
