@@ -60,4 +60,22 @@ public class MensagemController {
                 return ResponseEntity.ok(mensagemDTO);
         }
 
+        @DeleteMapping("/{idMensagem}")
+        @Operation(summary = "Deleta uma mensagem.")
+        @ApiResponse(responseCode = "200", description = "Mensagem deletada com sucesso.")
+        ResponseEntity<String> deletarMensagem(@PathVariable Long idMensagem,
+                        @RequestHeader String Authorization) {
+                String idEmissor = this.jwtService.validateToken(Authorization);
+                Mensagem mensagem = null;
+                try {
+                        mensagem = this.mensagemService.deletarMensagem(idEmissor, idMensagem);
+                        if (mensagem == null) {
+                                return ResponseEntity.notFound().build();
+                        }
+                } catch (Exception e) {
+                        return ResponseEntity.badRequest().body(e.getMessage());
+                }
+                return ResponseEntity.ok("Mensagem deletada com sucesso.");
+        }
+
 }

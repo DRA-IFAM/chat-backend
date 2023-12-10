@@ -43,4 +43,15 @@ public class MensagemService {
         return mensagens;
     }
 
+    public Mensagem deletarMensagem(String idEmissor, Long idMensagem) {
+        Optional<Mensagem> mensagem = mensagemRepository.findById(idMensagem);
+        if (mensagem.isEmpty()) {
+            return null;
+        }
+        if (!mensagem.get().getEmissor().getId().equals(idEmissor)) {
+            throw new RuntimeException("Você não tem permissão para deletar essa mensagem.");
+        }
+        mensagemRepository.delete(mensagem.get());
+        return mensagem.get();
+    }
 }
