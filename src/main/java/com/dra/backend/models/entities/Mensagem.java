@@ -2,13 +2,15 @@ package com.dra.backend.models.entities;
 
 import java.util.*;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
-@Entity
 @NoArgsConstructor
+@Schema(hidden = true)
+@Entity
+@Table(name = "mensagens")
 public class Mensagem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,15 +26,20 @@ public class Mensagem {
     @Temporal(TemporalType.DATE)
     private Date data;
 
-    public Mensagem(Contato emissor, Contato receptor, String assunto, String conteudo) {
+    private Mensagem(Contato emissor, Contato receptor, String assunto, String conteudo) {
         this.emissor = emissor;
         this.receptor = receptor;
         this.assunto = assunto;
         this.conteudo = conteudo;
     }
 
+    public static Mensagem from(Contato emissor, Contato receptor, String assunto, String conteudo) {
+        return new Mensagem(emissor, receptor, assunto, conteudo);
+    }
+
     @PrePersist
     protected void onCreate() {
         data = new Date();
     }
+
 }

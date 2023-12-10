@@ -17,7 +17,7 @@ public class ContatoService {
 
     public List<ListarContato> listarContatos() {
         List<Contato> contatos = contatoRepository.findAll();
-        List<ListarContato> listarContatos = contatos.stream().map(contato -> new ListarContato(contato)).toList();
+        List<ListarContato> listarContatos = contatos.stream().map(contato -> ListarContato.from(contato)).toList();
         return listarContatos;
     }
 
@@ -26,16 +26,16 @@ public class ContatoService {
         if (contato.isEmpty()) {
             return null;
         }
-        ListarContato listarContato = new ListarContato(contato.get());
+        ListarContato listarContato = ListarContato.from(contato.get());
         return Optional.of(listarContato);
     }
 
-    public Contato deletarContato(String email) {
+    public Optional<Contato> deletarContato(String email) {
         Optional<Contato> contato = contatoRepository.findByEmail(email);
         if (contato.isEmpty()) {
             return null;
         }
         contatoRepository.delete(contato.get());
-        return new Contato();
+        return contato;
     }
 }

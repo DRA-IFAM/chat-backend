@@ -1,17 +1,12 @@
 package com.dra.backend.controllers;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import java.util.Optional;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.*;
+import org.springframework.web.bind.annotation.*;
 
 import com.dra.backend.dto.auth.CriarContatoDTO;
 import com.dra.backend.dto.auth.LogarContatoDTO;
@@ -41,13 +36,13 @@ public class AuthController {
     @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso.")
     @ApiResponse(responseCode = "400", description = "Usuário já existe.")
     @ApiResponse(responseCode = "400", description = "Erro ao criar usuário. Por favor, verifique os dados e tente novamente.")
-    ResponseEntity<String> createUser(@RequestBody CriarContatoDTO contatoDTO) {
-        String validateDTO = contatoDTO.validateFields();
-        if (validateDTO != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validateDTO);
+    ResponseEntity<Object> criarUsuario(@RequestBody CriarContatoDTO contatoDTO) {
+        Optional<String> error = CriarContatoDTO.validarCampos(contatoDTO);
+        if (error.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
         try {
-            Contato contato = CriarContatoDTO.from(contatoDTO);
+            Contato contato = Contato.from(contatoDTO);
             Optional<Contato> user = this.authService.register(contato);
             if (user.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário já existe.");
@@ -64,13 +59,13 @@ public class AuthController {
     @ApiResponse(responseCode = "200", description = "JWT Token")
     @ApiResponse(responseCode = "400", description = "Dados inválidos.")
     @ApiResponse(responseCode = "401", description = "Usuário ou senha inválidos.")
-    ResponseEntity<String> login(@RequestBody LogarContatoDTO data) {
-        String validateDTO = data.validateFields();
-        if (validateDTO != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validateDTO);
+    ResponseEntity<String> login(@RequestBody LogarContatoDTO usuario) {
+        Optional<String> error = LogarContatoDTO.validarCampos(usuario);
+        if (error.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error.get());
         }
         try {
-            var usernameAndPassword = new UsernamePasswordAuthenticationToken(data.getEmail(), data.getSenha());
+            var usernameAndPassword = new UsernamePasswordAuthenticationToken(usuario.getEmail(), usuario.getSenha());
             var auth = authenticationManager.authenticate(usernameAndPassword);
             Contato user = (Contato) auth.getPrincipal();
             String jwtToken = this.jwtService.generateToken(user.getEmail());

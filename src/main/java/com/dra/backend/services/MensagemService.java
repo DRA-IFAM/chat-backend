@@ -31,7 +31,7 @@ public class MensagemService {
     public Mensagem enviarMensagem(String emailEmissor, String emailRecepetor, String assunto, String conteudo) {
         Optional<Contato> emissor = contatoRepository.findByEmail(emailEmissor);
         Optional<Contato> receptor = contatoRepository.findByEmail(emailRecepetor);
-        Mensagem mensagem = new Mensagem(emissor.get(), receptor.get(), assunto, conteudo);
+        Mensagem mensagem = Mensagem.from(emissor.get(), receptor.get(), assunto, conteudo);
         return mensagemRepository.save(mensagem);
     }
 
@@ -42,7 +42,7 @@ public class MensagemService {
         return mensagens;
     }
 
-    public Mensagem deletarMensagem(String emailEmissor, Long idMensagem) {
+    public Optional<Mensagem> deletarMensagem(String emailEmissor, Long idMensagem) {
         Optional<Mensagem> mensagem = mensagemRepository.findById(idMensagem);
         if (mensagem.isEmpty()) {
             return null;
@@ -51,6 +51,6 @@ public class MensagemService {
             throw new RuntimeException("Você não tem permissão para deletar essa mensagem.");
         }
         mensagemRepository.delete(mensagem.get());
-        return mensagem.get();
+        return mensagem;
     }
 }
