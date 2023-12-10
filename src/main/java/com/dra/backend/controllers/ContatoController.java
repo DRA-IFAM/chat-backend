@@ -36,28 +36,28 @@ public class ContatoController {
 
     }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "Lista um contato pelo id.")
+    @GetMapping("/{email}")
+    @Operation(summary = "Lista um contato pelo email.")
     @ApiResponse(responseCode = "200", description = "Contato listado com sucesso.")
     @ApiResponse(responseCode = "404", description = "Contato não encontrado.")
-    ResponseEntity<ListarContato> listarContatoPorId(@PathVariable String id) {
-        Optional<ListarContato> contato = contatoService.listarContato(id);
+    ResponseEntity<ListarContato> listarContatoPorEmail(@PathVariable String email) {
+        Optional<ListarContato> contato = contatoService.listarContato(email);
         if (!contato.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         return ResponseEntity.ok(contato.get());
     }
 
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Deleta um contato pelo id.")
-    @ApiResponse(responseCode = "200", description = "Contato deletado com sucesso.")
+    @DeleteMapping("/{email}")
+    @Operation(summary = "Deleta um contato pelo email.")
+    @ApiResponse(responseCode = "204", description = "Contato deletado com sucesso.")
     @ApiResponse(responseCode = "404", description = "Contato não encontrado.")
-    ResponseEntity<Contato> deletarContato(@PathVariable String id) {
-        Optional<Contato> contato = contatoService.deletarContato(id);
-        if (!contato.isPresent()) {
+    ResponseEntity<Void> deletarContato(@PathVariable String email) {
+        Contato contato = contatoService.deletarContato(email);
+        if (contato == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 }

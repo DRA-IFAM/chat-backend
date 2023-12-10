@@ -34,7 +34,7 @@ public class RequestFilter extends OncePerRequestFilter {
             String token = getToken(request);
             if (token != null) {
                 String userId = this.jwtService.validateToken(token);
-                UserDetails user = this.userRepository.findContatoById(userId);
+                UserDetails user = this.userRepository.findContatoByEmail(userId);
                 var auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }

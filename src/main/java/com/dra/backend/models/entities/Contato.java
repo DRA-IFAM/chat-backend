@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
 import lombok.*;
@@ -15,6 +16,7 @@ import lombok.*;
 @Data
 @Entity
 @Table(name = "users")
+@Schema(hidden = true)
 public class Contato implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

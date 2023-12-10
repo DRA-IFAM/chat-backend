@@ -19,8 +19,8 @@ public class MensagemService {
     @Autowired
     private ContatoRepository contatoRepository;
 
-    public List<Mensagem> verMensagens(String idEmissor) {
-        Optional<Contato> emissor = contatoRepository.findById(idEmissor);
+    public List<Mensagem> verMensagens(String emailEmissor) {
+        Optional<Contato> emissor = contatoRepository.findByEmail(emailEmissor);
         if (emissor.isEmpty()) {
             return null;
         }
@@ -28,27 +28,26 @@ public class MensagemService {
         return mensagens;
     }
 
-    public Mensagem enviarMensagem(String idEmissor, String idRecepetor, String assunto, String conteudo) {
-        Optional<Contato> emissor = contatoRepository.findById(idEmissor);
-        Optional<Contato> receptor = contatoRepository.findById(idRecepetor);
-        System.out.println(emissor);
+    public Mensagem enviarMensagem(String emailEmissor, String emailRecepetor, String assunto, String conteudo) {
+        Optional<Contato> emissor = contatoRepository.findByEmail(emailEmissor);
+        Optional<Contato> receptor = contatoRepository.findByEmail(emailRecepetor);
         Mensagem mensagem = new Mensagem(emissor.get(), receptor.get(), assunto, conteudo);
         return mensagemRepository.save(mensagem);
     }
 
-    public List<Mensagem> verMensagens(String idEmissor, String idReceptor) {
-        Optional<Contato> emissor = contatoRepository.findById(idEmissor);
-        Optional<Contato> receptor = contatoRepository.findById(idReceptor);
+    public List<Mensagem> verMensagens(String emailEmissor, String emailReceptor) {
+        Optional<Contato> emissor = contatoRepository.findByEmail(emailEmissor);
+        Optional<Contato> receptor = contatoRepository.findByEmail(emailReceptor);
         List<Mensagem> mensagens = mensagemRepository.findAllByReceptorAndEmissor(receptor.get(), emissor.get());
         return mensagens;
     }
 
-    public Mensagem deletarMensagem(String idEmissor, Long idMensagem) {
+    public Mensagem deletarMensagem(String emailEmissor, Long idMensagem) {
         Optional<Mensagem> mensagem = mensagemRepository.findById(idMensagem);
         if (mensagem.isEmpty()) {
             return null;
         }
-        if (!mensagem.get().getEmissor().getId().equals(idEmissor)) {
+        if (!mensagem.get().getEmissor().getEmail().equals(emailEmissor)) {
             throw new RuntimeException("Você não tem permissão para deletar essa mensagem.");
         }
         mensagemRepository.delete(mensagem.get());

@@ -9,5 +9,5 @@ import com.dra.backend.models.entities.Contato;
 public interface ContatoRepository extends JpaRepository<Contato, String> {
     Optional<Contato> findByEmail(String email);
 
-    UserDetails findContatoById(String id);
+    UserDetails findContatoByEmail(String email);
 }

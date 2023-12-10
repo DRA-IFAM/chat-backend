@@ -21,8 +21,8 @@ public class ContatoService {
         return listarContatos;
     }
 
-    public Optional<ListarContato> listarContato(String id) {
-        Optional<Contato> contato = contatoRepository.findById(id);
+    public Optional<ListarContato> listarContato(String email) {
+        Optional<Contato> contato = contatoRepository.findByEmail(email);
         if (contato.isEmpty()) {
             return null;
         }
@@ -30,12 +30,12 @@ public class ContatoService {
         return Optional.of(listarContato);
     }
 
-    public Optional<Contato> deletarContato(String id) {
-        Optional<Contato> contato = contatoRepository.findById(id);
+    public Contato deletarContato(String email) {
+        Optional<Contato> contato = contatoRepository.findByEmail(email);
         if (contato.isEmpty()) {
             return null;
         }
         contatoRepository.delete(contato.get());
-        return contato;
+        return new Contato();
     }
 }
