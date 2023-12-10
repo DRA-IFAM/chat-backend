@@ -1,4 +1,4 @@
-package com.dra.backend.controller;
+package com.dra.backend.controllers;
 
 import java.util.List;
 
@@ -9,12 +9,18 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dra.backend.model.Compromisso;
-import com.dra.backend.service.CompromissoService;
+import com.dra.backend.models.entities.Compromisso;
+import com.dra.backend.services.CompromissoService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Compromisso")
 @RestController
 @RequestMapping("/compromisso")
 public class CompromissoController {
@@ -23,11 +29,16 @@ public class CompromissoController {
 	CompromissoService compromissoService;
 
 	@PostMapping
-	ResponseEntity<Compromisso> criarCompromissos() {
-		return null;
+	@Operation(summary = "Cria um compromisso.")
+	@ApiResponse(responseCode = "200", description = "Compromisso criado com sucesso.")
+	ResponseEntity<Compromisso> criarCompromissos(@RequestBody Compromisso compromisso) {
+		compromissoService.criarCompromisso(compromisso);
+		return ResponseEntity.created(null).body(compromisso);
 	}
 
 	@GetMapping
+	@Operation(summary = "Lista todos os compromissos.")
+	@ApiResponse(responseCode = "200", description = "Compromissos listados com sucesso.")
 	ResponseEntity<List<Compromisso>> listaCompromissos() {
 		List<Compromisso> compromissos = compromissoService.listaCompromissos();
 		if (compromissos.isEmpty())
@@ -41,8 +52,14 @@ public class CompromissoController {
 	}
 
 	@PutMapping
-	ResponseEntity<Compromisso> editarCompromisso() {
-		return null;
+	@Operation(summary = "Edita o compromisso selecionado.")
+	@ApiResponse(responseCode = "200", description = "Compromisso editado com sucesso.")
+	ResponseEntity<Compromisso> editarCompromisso(@RequestBody Compromisso compromisso) {
+		try {
+			return ResponseEntity.accepted().body(compromissoService.editarCompromisso(compromisso));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Compromisso());
+		}
 	}
 
 	@DeleteMapping
@@ -65,4 +82,3 @@ public class CompromissoController {
 		return null;
 	}
 }
-
