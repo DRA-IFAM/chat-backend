@@ -16,12 +16,14 @@ import com.dra.backend.services.JwtService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Auth")
 
 @RestController
 @RequestMapping("/api/auth")
+@SecurityRequirements
 public class AuthController {
 
     @Autowired

@@ -31,6 +31,9 @@ public class MensagemService {
     public Mensagem enviarMensagem(String emailEmissor, String emailRecepetor, String assunto, String conteudo) {
         Optional<Contato> emissor = contatoRepository.findByEmail(emailEmissor);
         Optional<Contato> receptor = contatoRepository.findByEmail(emailRecepetor);
+        if (emissor.isEmpty() || receptor.isEmpty()) {
+            throw new RuntimeException("Emissor ou receptor não encontrado.");
+        }
         Mensagem mensagem = Mensagem.from(emissor.get(), receptor.get(), assunto, conteudo);
         return mensagemRepository.save(mensagem);
     }
@@ -38,6 +41,9 @@ public class MensagemService {
     public List<Mensagem> verMensagens(String emailEmissor, String emailReceptor) {
         Optional<Contato> emissor = contatoRepository.findByEmail(emailEmissor);
         Optional<Contato> receptor = contatoRepository.findByEmail(emailReceptor);
+        if (emissor.isEmpty() || receptor.isEmpty()) {
+            return List.of(new Mensagem());
+        }
         List<Mensagem> mensagens = mensagemRepository.findAllByReceptorAndEmissor(receptor.get(), emissor.get());
         return mensagens;
     }

@@ -17,11 +17,13 @@ import com.dra.backend.services.MensagemService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Mensagem")
-@SecurityRequirement(name = "BearerAuth")
+@ApiResponses(value = {
+                @ApiResponse(responseCode = "403", description = "Acesso negado")
+})
 @RequestMapping("/api/mensagem")
 @RestController
 public class MensagemController {
@@ -47,9 +49,15 @@ public class MensagemController {
         @GetMapping("/{emailReceptor}")
         @Operation(summary = "Lista todas as mensagens enviadas para um usuário.")
         @ApiResponse(responseCode = "200", description = "Mensagens listadas com sucesso.")
+        @ApiResponse(responseCode = "404", description = "Emissor ou receptor não encontrado.")
         ResponseEntity<List<ListarMensagem>> getMensagemEnviadaPara(@PathVariable String emailReceptor) {
                 String emailEmissor = getEmailEmissor();
-                List<Mensagem> mensagens = this.mensagemService.verMensagens(emailEmissor, emailReceptor);
+                List<Mensagem> mensagens = null;
+                try {
+                        mensagens = this.mensagemService.verMensagens(emailEmissor, emailReceptor);
+                } catch (Exception e) {
+                        return ResponseEntity.notFound().build();
+                }
                 List<ListarMensagem> listarMensagens = mensagens.stream().map(mensagem -> ListarMensagem.from(mensagem))
                                 .toList();
                 return ResponseEntity.ok(listarMensagens);
@@ -58,14 +66,20 @@ public class MensagemController {
         @PostMapping
         @Operation(summary = "Envia uma mensagem para um usuário.")
         @ApiResponse(responseCode = "200", description = "Mensagem enviada com sucesso.")
+        @ApiResponse(responseCode = "404", description = "Emissor ou receptor não encontrado.")
         ResponseEntity<ListarMensagem> criarMensagem(@RequestBody EnviarMensagemDTO dtoMensagem) {
                 Optional<String> error = EnviarMensagemDTO.validarCampos(dtoMensagem);
                 if (error.isPresent()) {
                         return ResponseEntity.badRequest().build();
                 }
                 String emailEmissor = getEmailEmissor();
-                Mensagem mensagem = this.mensagemService.enviarMensagem(emailEmissor, dtoMensagem.getReceptor(),
-                                dtoMensagem.getConteudo(), dtoMensagem.getAssunto());
+                Mensagem mensagem = null;
+                try {
+                        mensagem = this.mensagemService.enviarMensagem(emailEmissor, dtoMensagem.getReceptor(),
+                                        dtoMensagem.getConteudo(), dtoMensagem.getAssunto());
+                } catch (Exception e) {
+                        return ResponseEntity.notFound().build();
+                }
                 ListarMensagem listarMensagem = ListarMensagem.from(mensagem);
                 return ResponseEntity.ok(listarMensagem);
         }

@@ -15,11 +15,13 @@ import com.dra.backend.services.ContatoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Contato")
-@SecurityRequirement(name = "BearerAuth")
+@ApiResponses(value = {
+        @ApiResponse(responseCode = "403", description = "Acesso negado")
+})
 @RequestMapping("/api/contato")
 @RestController
 public class ContatoController {
