@@ -37,8 +37,8 @@ public class MensagemController {
         @GetMapping
         @Operation(summary = "Lista todas as mensagens.")
         @ApiResponse(responseCode = "200", description = "Mensagens listadas com sucesso.")
-        ResponseEntity<List<ListarMensagem>> getMinhasMensagens() {
-                String emailEmissor = getEmailEmissor();
+        ResponseEntity<List<ListarMensagem>> pegarMinhasMsgs() {
+                String emailEmissor = pegarEmailEmissor();
                 List<Mensagem> mensagens = this.mensagemService.verMensagens(emailEmissor);
                 List<ListarMensagem> listarMensagem = mensagens.stream().map(mensagem -> ListarMensagem.from(mensagem))
                                 .toList();
@@ -50,14 +50,9 @@ public class MensagemController {
         @Operation(summary = "Lista todas as mensagens enviadas para um usuário.")
         @ApiResponse(responseCode = "200", description = "Mensagens listadas com sucesso.")
         @ApiResponse(responseCode = "404", description = "Emissor ou receptor não encontrado.")
-        ResponseEntity<List<ListarMensagem>> getMensagemEnviadaPara(@PathVariable String emailReceptor) {
-                String emailEmissor = getEmailEmissor();
-                List<Mensagem> mensagens = null;
-                try {
-                        mensagens = this.mensagemService.verMensagens(emailEmissor, emailReceptor);
-                } catch (Exception e) {
-                        return ResponseEntity.notFound().build();
-                }
+        ResponseEntity<List<ListarMensagem>> pegarMsgsEnviadas(@PathVariable String emailReceptor) {
+                String emailEmissor = pegarEmailEmissor();
+                List<Mensagem> mensagens = this.mensagemService.verMsgsEnviadasPara(emailEmissor, emailReceptor);
                 List<ListarMensagem> listarMensagens = mensagens.stream().map(mensagem -> ListarMensagem.from(mensagem))
                                 .toList();
                 return ResponseEntity.ok(listarMensagens);
@@ -72,7 +67,7 @@ public class MensagemController {
                 if (error.isPresent()) {
                         return ResponseEntity.badRequest().build();
                 }
-                String emailEmissor = getEmailEmissor();
+                String emailEmissor = pegarEmailEmissor();
                 Mensagem mensagem = null;
                 try {
                         mensagem = this.mensagemService.enviarMensagem(emailEmissor, dtoMensagem.getReceptor(),
@@ -90,7 +85,7 @@ public class MensagemController {
         @ApiResponse(responseCode = "400", description = "Você não tem permissão para deletar essa mensagem.")
         @ApiResponse(responseCode = "404", description = "Mensagem não encontrada.")
         ResponseEntity<Void> deletarMensagem(@PathVariable Long idMensagem) {
-                String emailEmissor = getEmailEmissor();
+                String emailEmissor = pegarEmailEmissor();
                 Optional<Mensagem> mensagem = null;
                 try {
                         mensagem = this.mensagemService.deletarMensagem(emailEmissor, idMensagem);
@@ -103,7 +98,7 @@ public class MensagemController {
                 return ResponseEntity.noContent().build();
         }
 
-        private String getEmailEmissor() {
+        private String pegarEmailEmissor() {
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 return authentication.getName();
         }

@@ -1,5 +1,6 @@
 package com.dra.backend.services;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class MensagemService {
     public List<Mensagem> verMensagens(String emailEmissor) {
         Optional<Contato> emissor = contatoRepository.findByEmail(emailEmissor);
         if (emissor.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         }
         List<Mensagem> mensagens = mensagemRepository.findByEmissor(emissor.get());
         return mensagens;
@@ -38,11 +39,11 @@ public class MensagemService {
         return mensagemRepository.save(mensagem);
     }
 
-    public List<Mensagem> verMensagens(String emailEmissor, String emailReceptor) {
+    public List<Mensagem> verMsgsEnviadasPara(String emailEmissor, String emailReceptor) {
         Optional<Contato> emissor = contatoRepository.findByEmail(emailEmissor);
         Optional<Contato> receptor = contatoRepository.findByEmail(emailReceptor);
         if (emissor.isEmpty() || receptor.isEmpty()) {
-            return List.of(new Mensagem());
+            return Collections.emptyList();
         }
         List<Mensagem> mensagens = mensagemRepository.findAllByReceptorAndEmissor(receptor.get(), emissor.get());
         return mensagens;
