@@ -7,16 +7,18 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.dra.backend.dto.auth.CriarContatoDTO;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
 import lombok.*;
 
-@NoArgsConstructor
 @Data
+@Schema(hidden = true)
 @Entity
 @Table(name = "users")
-@Schema(hidden = true)
+@NoArgsConstructor
 public class Contato implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -40,18 +42,20 @@ public class Contato implements UserDetails {
     @Column(nullable = false)
     private ContatoRole role;
 
-    public Contato(String nome, String email, String senha, String telefone, String endereco, String bairro,
-            String cidade,
-            String estado) {
-        this.setNome(nome);
-        this.setEmail(email);
-        this.setSenha(senha);
-        this.setTelefone(telefone);
-        this.setEndereco(endereco);
-        this.setBairro(bairro);
-        this.setCidade(cidade);
-        this.setEstado(estado);
+    public Contato(CriarContatoDTO contatoDTO) {
+        this.nome = contatoDTO.getNome();
+        this.email = contatoDTO.getEmail();
+        this.senha = contatoDTO.getSenha();
+        this.telefone = contatoDTO.getTelefone();
+        this.endereco = contatoDTO.getEndereco();
+        this.bairro = contatoDTO.getBairro();
+        this.cidade = contatoDTO.getCidade();
+        this.estado = contatoDTO.getEstado();
         this.role = ContatoRole.USER;
+    }
+
+    public static Contato from(CriarContatoDTO contatoDTO) {
+        return new Contato(contatoDTO);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.dra.backend.services;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class MensagemService {
     public List<Mensagem> verMensagens(String emailEmissor) {
         Optional<Contato> emissor = contatoRepository.findByEmail(emailEmissor);
         if (emissor.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         }
         List<Mensagem> mensagens = mensagemRepository.findByEmissor(emissor.get());
         return mensagens;
@@ -31,18 +32,24 @@ public class MensagemService {
     public Mensagem enviarMensagem(String emailEmissor, String emailRecepetor, String assunto, String conteudo) {
         Optional<Contato> emissor = contatoRepository.findByEmail(emailEmissor);
         Optional<Contato> receptor = contatoRepository.findByEmail(emailRecepetor);
-        Mensagem mensagem = new Mensagem(emissor.get(), receptor.get(), assunto, conteudo);
+        if (emissor.isEmpty() || receptor.isEmpty()) {
+            throw new RuntimeException("Emissor ou receptor não encontrado.");
+        }
+        Mensagem mensagem = Mensagem.from(emissor.get(), receptor.get(), assunto, conteudo);
         return mensagemRepository.save(mensagem);
     }
 
-    public List<Mensagem> verMensagens(String emailEmissor, String emailReceptor) {
+    public List<Mensagem> verMsgsEnviadasPara(String emailEmissor, String emailReceptor) {
         Optional<Contato> emissor = contatoRepository.findByEmail(emailEmissor);
         Optional<Contato> receptor = contatoRepository.findByEmail(emailReceptor);
+        if (emissor.isEmpty() || receptor.isEmpty()) {
+            return Collections.emptyList();
+        }
         List<Mensagem> mensagens = mensagemRepository.findAllByReceptorAndEmissor(receptor.get(), emissor.get());
         return mensagens;
     }
 
-    public Mensagem deletarMensagem(String emailEmissor, Long idMensagem) {
+    public Optional<Mensagem> deletarMensagem(String emailEmissor, Long idMensagem) {
         Optional<Mensagem> mensagem = mensagemRepository.findById(idMensagem);
         if (mensagem.isEmpty()) {
             return null;
@@ -51,6 +58,6 @@ public class MensagemService {
             throw new RuntimeException("Você não tem permissão para deletar essa mensagem.");
         }
         mensagemRepository.delete(mensagem.get());
-        return mensagem.get();
+        return mensagem;
     }
 }

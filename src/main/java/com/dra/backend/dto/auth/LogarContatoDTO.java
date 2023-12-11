@@ -1,28 +1,22 @@
 package com.dra.backend.dto.auth;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.Optional;
 
-@NoArgsConstructor
+import lombok.*;
+
 @Data
 public class LogarContatoDTO {
     private String email;
     private String senha;
 
-    private LogarContatoDTO(String email, String senha) {
-        this.setEmail(email);
-        this.setSenha(senha);
-    }
-
-    static LogarContatoDTO from(String username, String password) {
-        return new LogarContatoDTO(username, password);
-    }
-
-    public String validateFields() {
-        if (email == null || senha == null || email.isEmpty() || senha.isEmpty()) {
-            return "Dados inválidos. Por favor, tente novamente.";
+    public static Optional<String> validarCampos(LogarContatoDTO usuario) {
+        if (usuario.getEmail() == null || usuario.getEmail().isEmpty()) {
+            return Optional.of("Email inválido. Por favor, tente novamente.");
         }
-        return null;
+        if (usuario.getSenha() == null || usuario.getSenha().isEmpty()) {
+            return Optional.of("Senha inválida. Por favor, tente novamente.");
+        }
+        return Optional.empty();
     }
 
 }

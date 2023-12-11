@@ -1,4 +1,4 @@
-package com.dra.backend.dto.mensagem;
+package com.dra.backend.models.responses;
 
 import java.util.Date;
 
@@ -7,7 +7,7 @@ import com.dra.backend.models.entities.Mensagem;
 import lombok.Data;
 
 @Data
-public class MensagemDTO {
+public class ListarMensagem {
     Long id;
     String assunto;
     String emissor;
@@ -15,12 +15,16 @@ public class MensagemDTO {
     String conteudo;
     Date data;
 
-    public MensagemDTO(Mensagem mensagem) {
+    private ListarMensagem(Mensagem mensagem) {
         this.id = mensagem.getId();
         this.assunto = mensagem.getAssunto();
         this.emissor = mensagem.getEmissor().getEmail();
         this.receptor = mensagem.getReceptor().getEmail();
         this.conteudo = mensagem.getConteudo();
         this.data = mensagem.getData();
+    }
+
+    public static ListarMensagem from(Mensagem mensagem) {
+        return new ListarMensagem(mensagem);
     }
 }
