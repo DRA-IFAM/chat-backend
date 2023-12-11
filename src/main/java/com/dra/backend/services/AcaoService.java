@@ -42,10 +42,15 @@ public class AcaoService {
                 });
     }
 
-    public void deletarAcao(Long id) {
-        acaoRepository.deleteById(id);
+    public boolean deletarAcao(Long id) {
+        if (acaoRepository.existsById(id)) {
+            acaoRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
-    
+
+
     public List<Acao> buscarAcoesPorPublicador(Contato publicador) {
         return acaoRepository.findByPublicador(publicador);
     }
