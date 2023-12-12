@@ -12,35 +12,35 @@ import lombok.*;
 @Entity
 @Table(name = "mensagens")
 public class Mensagem {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	@Column(nullable = false)
-	private String assunto;
-	@ManyToOne
-	private Contato emissor;
-	@ManyToOne
-	private Contato receptor;
-	@Column(nullable = false)
-	private String conteudo;
-	@Temporal(TemporalType.DATE)
-	private Date data;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(nullable = false)
+    private String assunto;
+    @ManyToOne
+    private Contato emissor;
+    @ManyToOne
+    private Contato receptor;
+    @Column(nullable = false)
+    private String conteudo;
+    @Temporal(TemporalType.DATE)
+    private Date data;
 
-	private Mensagem(Contato emissor, Contato receptor, String assunto, String conteudo) {
-		this.emissor = emissor;
-		this.receptor = receptor;
-		this.assunto = assunto;
-		this.conteudo = conteudo;
-	}
+    private Mensagem(Contato emissor, Contato receptor, String assunto, String conteudo) {
+        this.emissor = emissor;
+        this.receptor = receptor;
+        this.assunto = assunto;
+        this.conteudo = conteudo;
+    }
 
-	public static Mensagem from(Contato emissor, Contato receptor, String assunto, String conteudo) {
-		return new Mensagem(emissor, receptor, assunto, conteudo);
-	}
+    public static Mensagem from(Contato emissor, Contato receptor, String assunto, String conteudo) {
+        return new Mensagem(emissor, receptor, assunto, conteudo);
+    }
 
-	@PrePersist
-	protected void onCreate() {
-		data = new Date();
-	}
+    @PrePersist
+    protected void onCreate() {
+        data = new Date();
+    }
 
 
 }
