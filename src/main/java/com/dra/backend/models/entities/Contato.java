@@ -15,7 +15,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Data
-@Schema(hidden = true)
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
@@ -42,21 +41,19 @@ public class Contato implements UserDetails {
 	@Column(nullable = false)
 	private ContatoRole role;
 
-	public Contato(CriarContatoDTO contatoDTO) {
-		this.nome = contatoDTO.getNome();
-		this.email = contatoDTO.getEmail();
-		this.senha = contatoDTO.getSenha();
-		this.telefone = contatoDTO.getTelefone();
-		this.endereco = contatoDTO.getEndereco();
-		this.bairro = contatoDTO.getBairro();
-		this.cidade = contatoDTO.getCidade();
-		this.estado = contatoDTO.getEstado();
-		this.role = ContatoRole.USER;
-	}
-
-	public static Contato from(CriarContatoDTO contatoDTO) {
-		return new Contato(contatoDTO);
-	}
+    public Contato(String nome, String email, String senha, String telefone, String endereco, String bairro,
+            String cidade,
+            String estado) {
+        this.setNome(nome);
+        this.setEmail(email);
+        this.setSenha(senha);
+        this.setTelefone(telefone);
+        this.setEndereco(endereco);
+        this.setBairro(bairro);
+        this.setCidade(cidade);
+        this.setEstado(estado);
+        this.role = ContatoRole.USER;
+    }
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

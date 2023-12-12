@@ -6,21 +6,22 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
-import com.dra.backend.models.entities.Contato;
 import com.dra.backend.models.responses.ListarContato;
 import com.dra.backend.services.ContatoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Contato")
+@ApiResponses(value = {
+        @ApiResponse(responseCode = "403", description = "Acesso negado")
+})
 @RequestMapping("/api/contato")
 @RestController
 public class ContatoController {
@@ -36,28 +37,30 @@ public class ContatoController {
 
     }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "Lista um contato pelo id.")
+    @GetMapping("/{email}")
+    @Operation(summary = "Lista um contato pelo email.")
     @ApiResponse(responseCode = "200", description = "Contato listado com sucesso.")
     @ApiResponse(responseCode = "404", description = "Contato não encontrado.")
-    ResponseEntity<ListarContato> listarContatoPorId(@PathVariable String id) {
-        Optional<ListarContato> contato = contatoService.listarContato(id);
+    ResponseEntity<ListarContato> listarContatoPorEmail(@PathVariable String email) {
+        Optional<ListarContato> contato = contatoService.listarContato(email);
         if (!contato.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         return ResponseEntity.ok(contato.get());
     }
 
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Deleta um contato pelo id.")
-    @ApiResponse(responseCode = "200", description = "Contato deletado com sucesso.")
-    @ApiResponse(responseCode = "404", description = "Contato não encontrado.")
-    ResponseEntity<Contato> deletarContato(@PathVariable String id) {
-        Optional<Contato> contato = contatoService.deletarContato(id);
-        if (!contato.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    @DeleteMapping("/{email}")
+    @Operation(summary = "Deleta um contato pelo email.")
+    @ApiResponse(responseCode = "204", description = "Contato deletado com sucesso.")
+    @ApiResponse(responseCode = "403", description = "Não é possível deletar o contato de outro usuário.")
+    ResponseEntity<Void> deletarContato(@PathVariable String email) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String emailLogado = authentication.getName();
+        if (!emailLogado.equals(email)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        return ResponseEntity.ok().build();
+        contatoService.deletarContato(emailLogado);
+        return ResponseEntity.noContent().build();
     }
 
 }

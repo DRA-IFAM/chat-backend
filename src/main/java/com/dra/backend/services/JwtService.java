@@ -20,9 +20,9 @@ public class JwtService {
     @Value("${jwt.issuer}")
     private String ISSUER;
 
-    public String generateToken(String userId) {
+    public String generateToken(String userEmail) {
         Algorithm algorithm = Algorithm.HMAC256(this.SECRET);
-        String jwtToken = JWT.create().withSubject(userId).withExpiresAt(this.getExpiryTime())
+        String jwtToken = JWT.create().withSubject(userEmail).withExpiresAt(this.getExpiryTime())
                 .withIssuer(ISSUER).sign(algorithm);
         return jwtToken == null ? null : jwtToken;
     }
@@ -32,8 +32,8 @@ public class JwtService {
             token = token.substring(7);
         }
         Algorithm algorithm = Algorithm.HMAC256(this.SECRET);
-        String userId = JWT.require(algorithm).withIssuer(ISSUER).build().verify(token).getSubject();
-        return userId == null ? null : this.generateToken(userId);
+        String userEmail = JWT.require(algorithm).withIssuer(ISSUER).build().verify(token).getSubject();
+        return userEmail == null ? null : this.generateToken(userEmail);
     }
 
     public String validateToken(String token) {
@@ -41,8 +41,8 @@ public class JwtService {
             token = token.substring(7);
         }
         Algorithm algorithm = Algorithm.HMAC256(this.SECRET);
-        String userId = JWT.require(algorithm).withIssuer(ISSUER).build().verify(token).getSubject();
-        return userId == null ? null : userId;
+        String userEmail = JWT.require(algorithm).withIssuer(ISSUER).build().verify(token).getSubject();
+        return userEmail == null ? null : userEmail;
 
     }
 
