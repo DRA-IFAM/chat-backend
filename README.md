@@ -32,6 +32,7 @@ Basta acessar o endereço http://localhost:8080/h2-console no seu navegador.
 
 - Breno Gonzaga
 - Julianne Castro
+- Lucas Medeiros
 - Messyas Gois França
 
 ## Desenvolvedores - Equipe 2
