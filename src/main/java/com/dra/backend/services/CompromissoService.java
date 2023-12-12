@@ -17,7 +17,6 @@ public class CompromissoService {
 
 	public Compromisso criarCompromisso(Compromisso compromisso) {
 		compromisso.setStatus(Compromisso.Status.SOLICITADO);
-		compromisso.setCriador(compromisso.getCriador());
 		return compromissoRepository.save(compromisso);
 	}
 
@@ -32,42 +31,70 @@ public class CompromissoService {
 		return new Compromisso();
 	}
 
-	public Compromisso editarCompromisso(Compromisso compromisso) {
-		Optional<Compromisso> optionalCompromisso = compromissoRepository.findById(compromisso.getId());
+	public Compromisso editarCompromisso(Long id, Compromisso compromisso) {
+		Optional<Compromisso> optionalCompromisso = compromissoRepository.findById(id);
+		if (optionalCompromisso.isPresent()) {
+			Compromisso compromisso_ = optionalCompromisso.get();
+			if (!compromisso.getData().equals(compromisso_.getData())
+					&& !compromisso.getLocal().equals(compromisso_.getLocal())) {
+				compromisso.setStatus(Compromisso.Status.REAGENDADO);
+			} else {
+				compromisso.setStatus(compromisso_.getStatus());
+			}
+			compromisso.setId(id);
+			return compromissoRepository.save(compromisso);
+		}
+		return new Compromisso();
+	}
+
+	public void excluirCompromisso(Long id) {
+		Optional<Compromisso> optionalCompromisso = compromissoRepository.findById(id);
+		if (optionalCompromisso.isPresent())
+			compromissoRepository.deleteById(id);
+	}
+
+	public Compromisso aceitarCompromisso(Long id) {
+		Optional<Compromisso> optionalCompromisso = compromissoRepository.findById(id);
 		if (optionalCompromisso.isPresent()) {
 			Compromisso compromissos = optionalCompromisso.get();
 
-			if (compromissos.getCriador().equals(compromisso.getCriador())) {
-				compromissos.setId(compromisso.getId());
-				compromissos.setData(compromisso.getData());
-				compromissos.setLocal(compromisso.getLocal());
-				compromissos.setDescricao(compromisso.getDescricao());
-
-				if (!compromissos.getData().equals(compromisso.getData())) {
-					compromissos.setStatus(Compromisso.Status.REAGENDADO);
-				}
+			if (compromissos.getStatus() == Compromisso.Status.SOLICITADO) {
+				compromissos.setStatus(Compromisso.Status.ACEITO);
 				return compromissoRepository.save(compromissos);
 			} else {
-				throw new UnsupportedOperationException("Usuário não tem permissão para editar este compromisso.");
+				throw new UnsupportedOperationException("Este compromisso não está em estado de solicitação.");
 			}
 		}
 		return new Compromisso();
-
 	}
 
-	public void excluirCompromisso() {
+	public Compromisso negarCompromisso(Long id) {
+		Optional<Compromisso> optionalCompromisso = compromissoRepository.findById(id);
+		if (optionalCompromisso.isPresent()) {
+			Compromisso compromissos = optionalCompromisso.get();
 
+			if (compromissos.getStatus() == Compromisso.Status.SOLICITADO) {
+				compromissos.setStatus(Compromisso.Status.NEGADO);
+				return compromissoRepository.save(compromissos);
+			} else {
+				throw new UnsupportedOperationException("Este compromisso não está em estado de solicitação.");
+			}
+		}
+		return new Compromisso();
 	}
 
-	public Compromisso aceitarCompromisso() {
-		return null;
-	}
+	public Compromisso cancelarCompromisso(Long id) {
+		Optional<Compromisso> optionalCompromisso = compromissoRepository.findById(id);
+		if (optionalCompromisso.isPresent()) {
+			Compromisso compromissos = optionalCompromisso.get();
 
-	public Compromisso negarCompromisso() {
-		return null;
-	}
-
-	public Compromisso cancelarCompromisso() {
-		return null;
+			if (compromissos.getStatus() == Compromisso.Status.SOLICITADO) {
+				compromissos.setStatus(Compromisso.Status.CANCELADO);
+				return compromissoRepository.save(compromissos);
+			} else {
+				throw new UnsupportedOperationException("Este compromisso não está em estado de solicitação.");
+			}
+		}
+		return new Compromisso();
 	}
 }

@@ -41,9 +41,6 @@ public class Compromisso {
 	@Enumerated(EnumType.STRING)
 	private Status status;
 
-	public Compromisso() {
-	}
-
 	public Compromisso(Long id, Contato criador, String titulo, LocalDateTime data, String local, String descricao,
 			List<Contato> participantes, Status status) {
 		this.id = id;

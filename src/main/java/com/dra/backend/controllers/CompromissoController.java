@@ -58,12 +58,12 @@ public class CompromissoController {
 		}
 	}
 
-	@PutMapping
+	@PutMapping("/{id}")
 	@Operation(summary = "Edita o compromisso selecionado.")
 	@ApiResponse(responseCode = "200", description = "Compromisso editado com sucesso.")
-	ResponseEntity<Compromisso> editarCompromisso(@RequestBody Compromisso compromisso) {
+	ResponseEntity<Compromisso> editarCompromisso(@PathVariable Long id, @RequestBody Compromisso compromisso) {
 		try {
-			return ResponseEntity.accepted().body(compromissoService.editarCompromisso(compromisso));
+			return ResponseEntity.accepted().body(compromissoService.editarCompromisso(id, compromisso));
 		} catch (UnsupportedOperationException e) {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
 		} catch (Exception e) {
@@ -71,23 +71,54 @@ public class CompromissoController {
 		}
 	}
 
-	@DeleteMapping
-	ResponseEntity<Compromisso> excluirCompromisso() {
-		return null;
+	@DeleteMapping("/{id}")
+	@Operation(summary = "Exclui um compromisso.")
+	@ApiResponse(responseCode = "200", description = "Compromisso excluído com sucesso.")
+	ResponseEntity<Compromisso> excluirCompromisso(@PathVariable Long id) {
+		try {
+			compromissoService.excluirCompromisso(id);
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new Compromisso());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Compromisso());
+		}
 	}
 
-	@PostMapping("/aceitar")
-	ResponseEntity<Compromisso> aceitarCompromisso() {
-		return null;
+	@PostMapping("/aceitar/{id}")
+	@Operation(summary = "Aceita um compromisso.")
+	@ApiResponse(responseCode = "200", description = "Compromisso aceito com sucesso.")
+	ResponseEntity<Compromisso> aceitarCompromisso(@PathVariable Long id) {
+		try {
+			return ResponseEntity.ok(compromissoService.aceitarCompromisso(id));
+		} catch (UnsupportedOperationException e) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Compromisso());
+		}
 	}
 
-	@PostMapping("/negar")
-	ResponseEntity<Compromisso> negarCompromisso() {
-		return null;
+	@PostMapping("/negar/{id}")
+	@Operation(summary = "Nega um compromisso.")
+	@ApiResponse(responseCode = "200", description = "Compromisso negado com sucesso.")
+	ResponseEntity<Compromisso> negarCompromisso(@PathVariable Long id) {
+		try {
+			return ResponseEntity.ok(compromissoService.negarCompromisso(id));
+		} catch (UnsupportedOperationException e) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Compromisso());
+		}
 	}
 
-	@PutMapping("/cancelar")
-	ResponseEntity<Compromisso> cancelarCompromisso() {
-		return null;
+	@PutMapping("/cancelar/{id}")
+	@Operation(summary = "Cancela um compromisso.")
+	@ApiResponse(responseCode = "200", description = "Compromisso cancelado com sucesso.")
+	ResponseEntity<Compromisso> cancelarCompromisso(@PathVariable Long id) {
+		try {
+			return ResponseEntity.ok(compromissoService.cancelarCompromisso(id));
+		} catch (UnsupportedOperationException e) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Compromisso());
+		}
 	}
 }
