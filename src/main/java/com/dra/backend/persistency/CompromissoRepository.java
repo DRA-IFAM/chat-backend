@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.dra.backend.models.entities.Compromisso;
 
-public interface CompromissoRepository extends JpaRepository<Compromisso, String> {
+public interface CompromissoRepository extends JpaRepository<Compromisso, Long> {
 
 }

@@ -1,7 +1,9 @@
 package com.dra.backend.models.entities;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.*;
 
@@ -14,17 +16,18 @@ import lombok.*;
 public class Compromisso {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@ManyToOne
-	private Contato admin;
+	private Contato criador;
 
-	@ManyToMany
-	private List<Contato> convidados;
+	@Column(nullable = false)
+	private String titulo;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Calendar data;
+	@Column(nullable = false)
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	private LocalDateTime data;
 
 	@Column(nullable = false)
 	private String local;
@@ -32,26 +35,24 @@ public class Compromisso {
 	@Column(nullable = false)
 	private String descricao;
 
-	/*
-	 * @ManyToMany private List<Acao> acoes;
-	 */
+	@ManyToMany
+	private List<Contato> participantes;
 
 	@Enumerated(EnumType.STRING)
 	private Status status;
-	
-	public Compromisso() {}
 
-	public Compromisso(Contato admin, List<Contato> convidados, Calendar data, String local, String descricao,
-			/*
-			 * List<Acao> acoes,
-			 */
-			Status status) {
-		this.admin = admin;
-		this.convidados = convidados;
+	public Compromisso() {
+	}
+
+	public Compromisso(Long id, Contato criador, String titulo, LocalDateTime data, String local, String descricao,
+			List<Contato> participantes, Status status) {
+		this.id = id;
+		this.criador = criador;
+		this.titulo = titulo;
 		this.data = data;
 		this.local = local;
 		this.descricao = descricao;
-//        this.acoes = acoes;
+		this.participantes = participantes;
 		this.status = status;
 	}
 

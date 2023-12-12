@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,8 +48,14 @@ public class CompromissoController {
 	}
 
 	@GetMapping("/{id}")
-	ResponseEntity<Compromisso> listaCompromissoPorId() {
-		return null;
+	@Operation(summary = "Lista o compromisso pelo Id")
+	@ApiResponse(responseCode = "200", description = "Compromisso listado com sucesso.")
+	ResponseEntity<Compromisso> listaCompromissoPorId(@PathVariable Long id) {
+		try {
+			return ResponseEntity.ok(compromissoService.listaCompromisso(id));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Compromisso());
+		}
 	}
 
 	@PutMapping
@@ -57,6 +64,8 @@ public class CompromissoController {
 	ResponseEntity<Compromisso> editarCompromisso(@RequestBody Compromisso compromisso) {
 		try {
 			return ResponseEntity.accepted().body(compromissoService.editarCompromisso(compromisso));
+		} catch (UnsupportedOperationException e) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Compromisso());
 		}

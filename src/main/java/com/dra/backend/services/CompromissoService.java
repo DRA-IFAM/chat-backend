@@ -16,6 +16,8 @@ public class CompromissoService {
 	CompromissoRepository compromissoRepository;
 
 	public Compromisso criarCompromisso(Compromisso compromisso) {
+		compromisso.setStatus(Compromisso.Status.SOLICITADO);
+		compromisso.setCriador(compromisso.getCriador());
 		return compromissoRepository.save(compromisso);
 	}
 
@@ -23,25 +25,34 @@ public class CompromissoService {
 		return compromissoRepository.findAll();
 	}
 
-	public Compromisso listaCompromisso() {
-		return null;
+	public Compromisso listaCompromisso(Long id) {
+		Optional<Compromisso> optionalCompromisso = compromissoRepository.findById(id);
+		if (optionalCompromisso.isPresent())
+			return optionalCompromisso.get();
+		return new Compromisso();
 	}
 
 	public Compromisso editarCompromisso(Compromisso compromisso) {
 		Optional<Compromisso> optionalCompromisso = compromissoRepository.findById(compromisso.getId());
 		if (optionalCompromisso.isPresent()) {
-			compromisso.setId(compromisso.getId());
-			compromisso.setData(compromisso.getData());
-			compromisso.setLocal(compromisso.getLocal());
-			compromisso.setDescricao(compromisso.getDescricao());
+			Compromisso compromissos = optionalCompromisso.get();
 
-			if (!compromisso.getData().equals(compromisso.getData())) {
-				compromisso.setStatus(Compromisso.Status.REAGENDADO);
+			if (compromissos.getCriador().equals(compromisso.getCriador())) {
+				compromissos.setId(compromisso.getId());
+				compromissos.setData(compromisso.getData());
+				compromissos.setLocal(compromisso.getLocal());
+				compromissos.setDescricao(compromisso.getDescricao());
+
+				if (!compromissos.getData().equals(compromisso.getData())) {
+					compromissos.setStatus(Compromisso.Status.REAGENDADO);
+				}
+				return compromissoRepository.save(compromissos);
+			} else {
+				throw new UnsupportedOperationException("Usuário não tem permissão para editar este compromisso.");
 			}
-
-			return compromissoRepository.save(compromisso);
 		}
 		return new Compromisso();
+
 	}
 
 	public void excluirCompromisso() {
