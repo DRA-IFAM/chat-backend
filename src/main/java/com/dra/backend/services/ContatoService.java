@@ -17,21 +17,21 @@ public class ContatoService {
 
     public List<ListarContato> listarContatos() {
         List<Contato> contatos = contatoRepository.findAll();
-        List<ListarContato> listarContatos = contatos.stream().map(contato -> new ListarContato(contato)).toList();
+        List<ListarContato> listarContatos = contatos.stream().map(contato -> ListarContato.from(contato)).toList();
         return listarContatos;
     }
 
-    public Optional<ListarContato> listarContato(String id) {
-        Optional<Contato> contato = contatoRepository.findById(id);
+    public Optional<ListarContato> listarContato(String email) {
+        Optional<Contato> contato = contatoRepository.findByEmail(email);
         if (contato.isEmpty()) {
             return null;
         }
-        ListarContato listarContato = new ListarContato(contato.get());
+        ListarContato listarContato = ListarContato.from(contato.get());
         return Optional.of(listarContato);
     }
 
-    public Optional<Contato> deletarContato(String id) {
-        Optional<Contato> contato = contatoRepository.findById(id);
+    public Optional<Contato> deletarContato(String email) {
+        Optional<Contato> contato = contatoRepository.findByEmail(email);
         if (contato.isEmpty()) {
             return null;
         }
