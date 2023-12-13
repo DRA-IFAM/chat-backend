@@ -58,7 +58,7 @@ public class CompromissoService {
 				emailCriador);
 		if (optionalCompromisso.isPresent())
 			return optionalCompromisso.get();
-		return new Compromisso();
+		return null;
 	}
 
 	public Compromisso editarCompromisso(Long id, Compromisso compromisso) {
@@ -84,10 +84,14 @@ public class CompromissoService {
 		return new Compromisso();
 	}
 
-	public void excluirCompromisso(Long id) {
-		Optional<Compromisso> optionalCompromisso = compromissoRepository.findById(id);
-		if (optionalCompromisso.isPresent())
-			compromissoRepository.deleteById(id);
+	public Compromisso excluirCompromisso(Long id, String emailCriador) {
+		Optional<Compromisso> optionalCompromisso = compromissoRepository.findByIdAndCriadorEmail(id, emailCriador);
+		if (!optionalCompromisso.isPresent()) {
+			return null;
+		}
+		Compromisso compromisso = optionalCompromisso.get();
+		compromissoRepository.delete(compromisso);
+		return compromisso;
 	}
 
 	public Compromisso aceitarCompromisso(Long id) {

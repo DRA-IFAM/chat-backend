@@ -57,6 +57,9 @@ public class CompromissoController {
 	ResponseEntity<ListarCompromisso> listaCompromissoPorId(@PathVariable Long id) {
 		String emailCriador = pegarEmailCriador();
 		Compromisso compromisso = compromissoService.listarMeusCompromissoPorId(id, emailCriador);
+		if (compromisso == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ListarCompromisso());
+		}
 		ListarCompromisso response = ListarCompromisso.from(compromisso);
 		return ResponseEntity.ok(response);
 	}
@@ -78,13 +81,13 @@ public class CompromissoController {
 	@DeleteMapping("/{id}")
 	@Operation(summary = "Exclui um compromisso.")
 	@ApiResponse(responseCode = "200", description = "Compromisso excluído com sucesso.")
-	ResponseEntity<Compromisso> excluirCompromisso(@PathVariable Long id) {
-		try {
-			compromissoService.excluirCompromisso(id);
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new Compromisso());
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Compromisso());
+	ResponseEntity<Void> excluirCompromisso(@PathVariable Long id) {
+		String emailCriador = pegarEmailCriador();
+		Compromisso compromisso = compromissoService.excluirCompromisso(id, emailCriador);
+		if (compromisso == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
+		return ResponseEntity.noContent().build();
 	}
 
 	@PostMapping("/aceitar/{id}")
