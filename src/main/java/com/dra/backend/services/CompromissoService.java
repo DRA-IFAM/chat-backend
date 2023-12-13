@@ -35,6 +35,13 @@ public class CompromissoService {
 		Optional<Compromisso> optionalCompromisso = compromissoRepository.findById(id);
 		if (optionalCompromisso.isPresent()) {
 			Compromisso compromisso_ = optionalCompromisso.get();
+
+			if (compromisso_.getStatus() == Compromisso.Status.NEGADO
+					|| compromisso_.getStatus() == Compromisso.Status.CANCELADO) {
+				throw new UnsupportedOperationException(
+						"Não é permitido editar compromissos com status NEGADO ou CANCELADO.");
+			}
+
 			if (!compromisso.getData().equals(compromisso_.getData())
 					&& !compromisso.getLocal().equals(compromisso_.getLocal())) {
 				compromisso.setStatus(Compromisso.Status.REAGENDADO);
