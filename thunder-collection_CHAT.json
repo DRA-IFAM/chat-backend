@@ -1,0 +1,370 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "CHAT",
+    "dateExported": "2023-12-13T16:50:23.104Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "768b1dcd-2739-45cc-b6d2-11edd195e81b",
+            "colId": "40cd93d6-dad7-457b-bc90-464e1227e3d0",
+            "containerId": "",
+            "name": "CRIAR CONTA",
+            "url": "http://localhost:8080/api/auth/criar",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-12-08T16:46:17.892Z",
+            "modified": "2023-12-11T01:50:10.178Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"nome\":\"Breno Gonzaga\",\n  \"email\":\"brenogonzaga\",\n  \"senha\":\"123456\",\n  \"telefone\":\"asd\",\n  \"endereco\": \"asd\",\n  \"bairro\":\"asd\",\n  \"cidade\":\"asd\",\n  \"estado\":\"asd\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "256bc897-1caf-42fc-8818-ad160472fce2",
+            "colId": "40cd93d6-dad7-457b-bc90-464e1227e3d0",
+            "containerId": "",
+            "name": "LOGAR",
+            "url": "http://localhost:8080/api/auth/logar",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-12-08T16:47:04.603Z",
+            "modified": "2023-12-10T19:31:03.372Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\":\"brenogonzaga\",\n  \"senha\":\"123456\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "778010f5-58c7-45d3-b9e1-38ed29496fe7",
+            "colId": "40cd93d6-dad7-457b-bc90-464e1227e3d0",
+            "containerId": "",
+            "name": "VER CONTATOS",
+            "url": "http://localhost:8080/api/contato",
+            "method": "GET",
+            "sortNum": 25000,
+            "created": "2023-12-10T17:03:50.039Z",
+            "modified": "2023-12-13T16:41:58.204Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJicmVub2dvbnphZ2EiLCJleHAiOjE3MDI1NzIwOTIsImlzcyI6IlVFQS1GaWxlLVNoYXJpbmcifQ.3c1erdPAp87CqyZMtAzs5WzCmIJN3MrpmWtr8aYq8PM"
+            },
+            "tests": []
+        },
+        {
+            "_id": "eac57f60-ca3d-4e75-aa08-b659494dd780",
+            "colId": "40cd93d6-dad7-457b-bc90-464e1227e3d0",
+            "containerId": "",
+            "name": "DELETAR CONTATO",
+            "url": "http://localhost:8080/api/usuario/brenogonzaga",
+            "method": "DELETE",
+            "sortNum": 26250,
+            "created": "2023-12-11T01:35:51.788Z",
+            "modified": "2023-12-11T02:11:54.273Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJicmVub2dvbnphZ2EiLCJleHAiOjE3MDIzNDY0MDEsImlzcyI6IlVFQS1GaWxlLVNoYXJpbmcifQ.Qhi7SRkV_llmJ75GSLOpRN7oi_vTvKnHLe3XyaULWZw"
+            },
+            "tests": []
+        },
+        {
+            "_id": "cf53aba7-1f91-4f7f-9560-578ba1051456",
+            "colId": "40cd93d6-dad7-457b-bc90-464e1227e3d0",
+            "containerId": "",
+            "name": "VER CONTATOS POR EMAIL",
+            "url": "http://localhost:8080/api/contato/brenogonzaga",
+            "method": "GET",
+            "sortNum": 27500,
+            "created": "2023-12-11T01:08:00.545Z",
+            "modified": "2023-12-13T16:42:16.083Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJicmVub2dvbnphZ2EiLCJleHAiOjE3MDI1NzIwOTIsImlzcyI6IlVFQS1GaWxlLVNoYXJpbmcifQ.3c1erdPAp87CqyZMtAzs5WzCmIJN3MrpmWtr8aYq8PM"
+            },
+            "tests": []
+        },
+        {
+            "_id": "8f57b834-4f98-4435-8142-0e1eefd8a3e5",
+            "colId": "40cd93d6-dad7-457b-bc90-464e1227e3d0",
+            "containerId": "",
+            "name": "ENVIAR MENSAGEM",
+            "url": "http://localhost:8080/api/mensagem",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-12-08T16:47:51.170Z",
+            "modified": "2023-12-13T16:42:21.991Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"assunto\":\"Assunto\",\n  \"conteudo\":\"Asd\",\n  \"receptor\":\"brenogonzaga\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJicmVub2dvbnphZ2EiLCJleHAiOjE3MDI1NzIwOTIsImlzcyI6IlVFQS1GaWxlLVNoYXJpbmcifQ.3c1erdPAp87CqyZMtAzs5WzCmIJN3MrpmWtr8aYq8PM"
+            },
+            "tests": []
+        },
+        {
+            "_id": "3777dc6c-b5d0-4d13-a4c2-fb8e99ee46d1",
+            "colId": "40cd93d6-dad7-457b-bc90-464e1227e3d0",
+            "containerId": "",
+            "name": "VER MINHAS MENSAGENS",
+            "url": "http://localhost:8080/api/mensagem",
+            "method": "GET",
+            "sortNum": 50000,
+            "created": "2023-12-08T17:50:00.180Z",
+            "modified": "2023-12-13T16:42:26.771Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJicmVub2dvbnphZ2EiLCJleHAiOjE3MDI1NzIwOTIsImlzcyI6IlVFQS1GaWxlLVNoYXJpbmcifQ.3c1erdPAp87CqyZMtAzs5WzCmIJN3MrpmWtr8aYq8PM"
+            },
+            "tests": []
+        },
+        {
+            "_id": "a2fe2364-e3e7-4319-bec6-0a14952dfb0e",
+            "colId": "40cd93d6-dad7-457b-bc90-464e1227e3d0",
+            "containerId": "",
+            "name": "VER MINHAS MENSAGENS ENVIADAS PARA UM CONTATO",
+            "url": "http://localhost:8080/api/mensagem/brenogonzaga",
+            "method": "GET",
+            "sortNum": 55000,
+            "created": "2023-12-10T20:44:28.968Z",
+            "modified": "2023-12-13T16:42:38.144Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJicmVub2dvbnphZ2EiLCJleHAiOjE3MDI1NzIwOTIsImlzcyI6IlVFQS1GaWxlLVNoYXJpbmcifQ.3c1erdPAp87CqyZMtAzs5WzCmIJN3MrpmWtr8aYq8PM"
+            },
+            "tests": []
+        },
+        {
+            "_id": "4a1e39f3-7682-4481-a72f-b98a23366bea",
+            "colId": "40cd93d6-dad7-457b-bc90-464e1227e3d0",
+            "containerId": "",
+            "name": "DELETAR MENSAGEM",
+            "url": "http://localhost:8080/api/mensagem/1",
+            "method": "DELETE",
+            "sortNum": 60000,
+            "created": "2023-12-10T16:54:54.163Z",
+            "modified": "2023-12-13T16:42:43.655Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJicmVub2dvbnphZ2EiLCJleHAiOjE3MDI1NzIwOTIsImlzcyI6IlVFQS1GaWxlLVNoYXJpbmcifQ.3c1erdPAp87CqyZMtAzs5WzCmIJN3MrpmWtr8aYq8PM"
+            },
+            "tests": []
+        },
+        {
+            "_id": "6586b799-b814-48a6-ba87-d57a5a2a4a9f",
+            "colId": "40cd93d6-dad7-457b-bc90-464e1227e3d0",
+            "containerId": "",
+            "name": "CRIAR COMPROMISSO",
+            "url": "http://localhost:8080/api/compromisso",
+            "method": "POST",
+            "sortNum": 70000,
+            "created": "2023-12-13T13:02:53.902Z",
+            "modified": "2023-12-13T16:40:29.557Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"titulo\":\"Compromisso\",\n  \"data\":\"2023-12-13T13:02:20.890Z\",\n  \"local\":\"ifam\",\n  \"descricao\":\"um compromisso\",\n  \"participantes\": [\n    \"brenogonzaga\", \"brenogonzaga\"\n  ]\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJicmVub2dvbnphZ2EiLCJleHAiOjE3MDI1NzIwMjIsImlzcyI6IlVFQS1GaWxlLVNoYXJpbmcifQ.2ADsh0gVwNxcNMBi7gI6XCUGMeQNNNU84P-j31rYcvs"
+            },
+            "tests": []
+        },
+        {
+            "_id": "8dcf63d3-fb64-4443-9e17-8a381cf02161",
+            "colId": "40cd93d6-dad7-457b-bc90-464e1227e3d0",
+            "containerId": "",
+            "name": "LISTAR COMPROMISSO",
+            "url": "http://localhost:8080/api/compromisso",
+            "method": "GET",
+            "sortNum": 80000,
+            "created": "2023-12-13T13:27:23.362Z",
+            "modified": "2023-12-13T13:53:24.994Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"titulo\":\"Compromisso\",\n  \"data\":\"2023-12-13T13:02:20.890Z\",\n  \"local\":\"ifam\",\n  \"descricao\":\"um compromisso\",\n  \"participantes\": [\n    \"brenogonzaga\", \"brenogonzaga\"\n  ]\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJicmVub2dvbnphZ2EiLCJleHAiOjE3MDI1NTg5OTYsImlzcyI6IlVFQS1GaWxlLVNoYXJpbmcifQ.Ojnhv8SHOsmCmnZYxDgxZP8TnlU3oSSqMp-Y9rwwCRA"
+            },
+            "tests": []
+        },
+        {
+            "_id": "7e665fde-aa49-42e0-9aa0-3c588bacb7dc",
+            "colId": "40cd93d6-dad7-457b-bc90-464e1227e3d0",
+            "containerId": "",
+            "name": "LISTAR COMPROMISSO POR ID",
+            "url": "http://localhost:8080/api/compromisso/1",
+            "method": "GET",
+            "sortNum": 90000,
+            "created": "2023-12-13T13:54:30.561Z",
+            "modified": "2023-12-13T13:54:49.352Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"titulo\":\"Compromisso\",\n  \"data\":\"2023-12-13T13:02:20.890Z\",\n  \"local\":\"ifam\",\n  \"descricao\":\"um compromisso\",\n  \"participantes\": [\n    \"brenogonzaga\", \"brenogonzaga\"\n  ]\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJicmVub2dvbnphZ2EiLCJleHAiOjE3MDI1NTg5OTYsImlzcyI6IlVFQS1GaWxlLVNoYXJpbmcifQ.Ojnhv8SHOsmCmnZYxDgxZP8TnlU3oSSqMp-Y9rwwCRA"
+            },
+            "tests": []
+        },
+        {
+            "_id": "f1728082-a463-46a7-9075-a3a66d476a2c",
+            "colId": "40cd93d6-dad7-457b-bc90-464e1227e3d0",
+            "containerId": "",
+            "name": "DELETAR COMPROMISSO",
+            "url": "http://localhost:8080/api/compromisso/2",
+            "method": "DELETE",
+            "sortNum": 100000,
+            "created": "2023-12-13T14:01:26.420Z",
+            "modified": "2023-12-13T16:50:03.974Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJicmVub2dvbnphZ2EiLCJleHAiOjE3MDI1NTg5OTYsImlzcyI6IlVFQS1GaWxlLVNoYXJpbmcifQ.Ojnhv8SHOsmCmnZYxDgxZP8TnlU3oSSqMp-Y9rwwCRA"
+            },
+            "tests": []
+        },
+        {
+            "_id": "b75e0355-17c3-46ac-87ba-602def782c84",
+            "colId": "40cd93d6-dad7-457b-bc90-464e1227e3d0",
+            "containerId": "",
+            "name": "ACEITAR / NEGAR / CANCELAR COMPROMISSO",
+            "url": "http://localhost:8080/api/compromisso/responder/2",
+            "method": "POST",
+            "sortNum": 110000,
+            "created": "2023-12-13T14:16:15.069Z",
+            "modified": "2023-12-13T16:50:01.026Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "\"ACEITO\"",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJicmVub2dvbnphZ2EiLCJleHAiOjE3MDI1NzIwOTIsImlzcyI6IlVFQS1GaWxlLVNoYXJpbmcifQ.3c1erdPAp87CqyZMtAzs5WzCmIJN3MrpmWtr8aYq8PM"
+            },
+            "tests": []
+        },
+        {
+            "_id": "3e2c8f97-91b4-4d70-b5dd-f55f8fcdab88",
+            "colId": "40cd93d6-dad7-457b-bc90-464e1227e3d0",
+            "containerId": "",
+            "name": "CRIAR AÇÂO",
+            "url": "http://localhost:8080/api/acao/1",
+            "method": "POST",
+            "sortNum": 120000,
+            "created": "2023-12-13T14:51:40.546Z",
+            "modified": "2023-12-13T15:19:14.753Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "[{\n  \"descricao\":\"acao\",\n  \"dataPlanejada\":\"2023-12-13T15:07:06.225Z\"\n}\n]",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJicmVub2dvbnphZ2EiLCJleHAiOjE3MDI1NTg5OTYsImlzcyI6IlVFQS1GaWxlLVNoYXJpbmcifQ.Ojnhv8SHOsmCmnZYxDgxZP8TnlU3oSSqMp-Y9rwwCRA"
+            },
+            "tests": []
+        },
+        {
+            "_id": "642daee4-3ca1-4688-91ce-c2753f059e5c",
+            "colId": "40cd93d6-dad7-457b-bc90-464e1227e3d0",
+            "containerId": "",
+            "name": "ATUALIZAR AÇÂO",
+            "url": "http://localhost:8080/api/acao/1",
+            "method": "PUT",
+            "sortNum": 125000,
+            "created": "2023-12-13T15:58:06.568Z",
+            "modified": "2023-12-13T16:12:54.789Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"descricao\":\"acao2\",\n  \"dataRealizada\":\"2023-12-13T15:07:06.225Z\"\n}\n",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJicmVub2dvbnphZ2EiLCJleHAiOjE3MDI1NTg5OTYsImlzcyI6IlVFQS1GaWxlLVNoYXJpbmcifQ.Ojnhv8SHOsmCmnZYxDgxZP8TnlU3oSSqMp-Y9rwwCRA"
+            },
+            "tests": []
+        },
+        {
+            "_id": "f068b053-414c-4e18-a45d-c0cc1ed59b1d",
+            "colId": "40cd93d6-dad7-457b-bc90-464e1227e3d0",
+            "containerId": "",
+            "name": "LISTAR AÇÃO POR COMPROMISSO",
+            "url": "http://localhost:8080/api/acao/1",
+            "method": "GET",
+            "sortNum": 130000,
+            "created": "2023-12-13T15:20:36.352Z",
+            "modified": "2023-12-13T15:21:35.870Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJicmVub2dvbnphZ2EiLCJleHAiOjE3MDI1NTg5OTYsImlzcyI6IlVFQS1GaWxlLVNoYXJpbmcifQ.Ojnhv8SHOsmCmnZYxDgxZP8TnlU3oSSqMp-Y9rwwCRA"
+            },
+            "tests": []
+        },
+        {
+            "_id": "820e33c6-9525-4176-8ae2-d2acd3da8177",
+            "colId": "40cd93d6-dad7-457b-bc90-464e1227e3d0",
+            "containerId": "",
+            "name": "DELETAR AÇÂO",
+            "url": "http://localhost:8080/api/acao/2",
+            "method": "DELETE",
+            "sortNum": 140000,
+            "created": "2023-12-13T16:13:56.334Z",
+            "modified": "2023-12-13T16:15:00.792Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJicmVub2dvbnphZ2EiLCJleHAiOjE3MDI1NTg5OTYsImlzcyI6IlVFQS1GaWxlLVNoYXJpbmcifQ.Ojnhv8SHOsmCmnZYxDgxZP8TnlU3oSSqMp-Y9rwwCRA"
+            },
+            "tests": []
+        }
+    ]
+}
