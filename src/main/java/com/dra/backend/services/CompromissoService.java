@@ -49,7 +49,7 @@ public class CompromissoService {
 		return compromissoRepository.save(compromisso);
 	}
 
-	public List<Compromisso> listaCompromissos() {
+	public List<Compromisso> listaCompromissosPorCriador(String emailCriador) {
 		return compromissoRepository.findAll();
 	}
 

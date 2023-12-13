@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.dra.backend.dto.compromisso.CriarCompromissoDTO;
 import com.dra.backend.models.entities.Compromisso;
+import com.dra.backend.models.responses.ListarCompromisso;
 import com.dra.backend.services.CompromissoService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,28 +43,26 @@ public class CompromissoController {
 	@GetMapping
 	@Operation(summary = "Lista todos os compromissos.")
 	@ApiResponse(responseCode = "200", description = "Compromissos listados com sucesso.")
-	ResponseEntity<List<Compromisso>> listaCompromissos() {
-		List<Compromisso> compromissos = compromissoService.listaCompromissos();
-		if (compromissos.isEmpty())
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(compromissos);
-		return ResponseEntity.ok(compromissos);
+	ResponseEntity<List<ListarCompromisso>> listaCompromissos() {
+		Optional<String> emailCriador = Optional.of(pegarEmailCriador());
+		List<Compromisso> compromissos = compromissoService.listaCompromissosPorCriador(emailCriador.get());
+		List<ListarCompromisso> response = compromissos.stream().map(compromisso -> ListarCompromisso.from(compromisso))
+				.toList();
+		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/{id}")
 	@Operation(summary = "Lista o compromisso pelo Id")
 	@ApiResponse(responseCode = "200", description = "Compromisso listado com sucesso.")
 	ResponseEntity<Compromisso> listaCompromissoPorId(@PathVariable Long id) {
-		try {
-			return ResponseEntity.ok(compromissoService.listaCompromisso(id));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Compromisso());
-		}
+		return ResponseEntity.ok(compromissoService.listaCompromisso(id));
 	}
 
 	@PutMapping("/{id}")
 	@Operation(summary = "Edita o compromisso selecionado.")
 	@ApiResponse(responseCode = "200", description = "Compromisso editado com sucesso.")
-	ResponseEntity<Compromisso> editarCompromisso(@PathVariable Long id, @RequestBody Compromisso compromisso) {
+	ResponseEntity<Compromisso> editarCompromisso(@PathVariable Long id,
+			@RequestBody Compromisso compromisso) {
 		try {
 			return ResponseEntity.accepted().body(compromissoService.editarCompromisso(id, compromisso));
 		} catch (UnsupportedOperationException e) {
