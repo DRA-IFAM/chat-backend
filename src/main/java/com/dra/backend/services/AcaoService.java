@@ -32,6 +32,7 @@ public class AcaoService {
                 .map(acaoExistente -> {
                     acaoExistente.setDescricao(dadosAtualizados.getDescricao());
                     acaoExistente.setPublicador(dadosAtualizados.getPublicador());
+                    acaoExistente.setCompromisso(dadosAtualizados.getCompromisso());
                     acaoExistente.setDataPlanejada(dadosAtualizados.getDataPlanejada());
                     acaoExistente.setDataRealizada(dadosAtualizados.getDataRealizada());
                     return acaoRepository.save(acaoExistente);
