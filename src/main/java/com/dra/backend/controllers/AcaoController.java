@@ -1,5 +1,6 @@
 package com.dra.backend.controllers;
 
+import com.dra.backend.dto.acao.AtualizarAcaoDTO;
 import com.dra.backend.dto.acao.CriarAcaoDTO;
 import com.dra.backend.models.entities.Acao;
 import com.dra.backend.models.responses.ListarAcao;
@@ -58,22 +59,17 @@ public class AcaoController {
         return ResponseEntity.ok(acoesDTO);
     }
 
-    // @GetMapping("/{id}")
-    // @Operation(summary = "Busca uma ação pelo ID.")
-    // @ApiResponse(responseCode = "200", description = "Ação encontrada.")
-    // @ApiResponse(responseCode = "404", description = "Ação não encontrada.")
-    // public ResponseEntity<Acao> buscarAcaoPorId(@PathVariable Long id) {
-    // return acaoService.buscarAcaoPorId(id)
-    // .map(ResponseEntity::ok)
-    // .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-    // }
-
     @PutMapping("/{id}")
     @Operation(summary = "Atualiza uma ação")
     @ApiResponse(responseCode = "200", description = "Ação atualizada com sucesso.")
     @ApiResponse(responseCode = "404", description = "Ação não encontrada.")
-    public ResponseEntity<Acao> atualizarAcao(@PathVariable Long id, Acao acao) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(acaoService.atualizarAcao(id, acao));
+    public ResponseEntity<ListarAcao> atualizarAcao(@PathVariable Long id, @RequestBody AtualizarAcaoDTO acaoDTO) {
+        Acao acao = acaoService.atualizarAcao(id, acaoDTO);
+        if (acao == null) {
+            return ResponseEntity.notFound().build();
+        }
+        ListarAcao response = ListarAcao.from(acao);
+        return ResponseEntity.ok(response);
 
     }
 

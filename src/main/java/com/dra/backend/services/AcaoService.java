@@ -1,5 +1,6 @@
 package com.dra.backend.services;
 
+import com.dra.backend.dto.acao.AtualizarAcaoDTO;
 import com.dra.backend.dto.acao.CriarAcaoDTO;
 import com.dra.backend.models.entities.Acao;
 import com.dra.backend.models.entities.Compromisso;
@@ -32,10 +33,6 @@ public class AcaoService {
         return acaoRepository.findByCompromisso(compromisso);
     }
 
-    public Optional<Acao> buscarAcaoPorId(Long id) {
-        return acaoRepository.findById(id);
-    }
-
     public List<Acao> criarAcao(List<CriarAcaoDTO> acaoDTO, Long idCompromisso, String emailPublicador) {
         List<Acao> acoes = new ArrayList<Acao>();
         for (CriarAcaoDTO acao : acaoDTO) {
@@ -59,20 +56,25 @@ public class AcaoService {
         return acoes;
     }
 
-    public Acao atualizarAcao(Long id, Acao dadosAtualizados) {
-        return acaoRepository.findById(id)
-                .map(acaoExistente -> {
-                    acaoExistente.setDescricao(dadosAtualizados.getDescricao());
-                    acaoExistente.setPublicador(dadosAtualizados.getPublicador());
-                    acaoExistente.setCompromisso(dadosAtualizados.getCompromisso());
-                    acaoExistente.setDataPlanejada(dadosAtualizados.getDataPlanejada());
-                    acaoExistente.setDataRealizada(dadosAtualizados.getDataRealizada());
-                    return acaoRepository.save(acaoExistente);
-                })
-                .orElseGet(() -> {
-                    dadosAtualizados.setId(id);
-                    return acaoRepository.save(dadosAtualizados);
-                });
+    public Acao atualizarAcao(Long id, AtualizarAcaoDTO acaoDTO) {
+        Optional<Acao> acao = acaoRepository.findById(id);
+        if (!acao.isPresent()) {
+            return null;
+        }
+
+        if (acaoDTO.getDescricao() != null) {
+            acao.get().setDescricao(acaoDTO.getDescricao());
+        }
+
+        if (acaoDTO.getDataPlanejada() != null) {
+            acao.get().setDataPlanejada(acaoDTO.getDataPlanejada());
+        }
+
+        if (acaoDTO.getDataRealizada() != null) {
+            acao.get().setDataRealizada(acaoDTO.getDataRealizada());
+        }
+
+        return acaoRepository.save(acao.get());
     }
 
     public boolean deletarAcao(Long id) {
@@ -83,7 +85,4 @@ public class AcaoService {
         return false;
     }
 
-    public List<Acao> buscarAcoesPorPublicador(Contato publicador) {
-        return acaoRepository.findByPublicador(publicador);
-    }
 }
