@@ -1,13 +1,18 @@
 package com.dra.backend.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dra.backend.dto.compromisso.CriarCompromissoDTO;
 import com.dra.backend.models.entities.Compromisso;
+import com.dra.backend.models.entities.CompromissoStatus;
+import com.dra.backend.models.entities.Contato;
 import com.dra.backend.persistency.CompromissoRepository;
+import com.dra.backend.persistency.ContatoRepository;
 
 @Service
 public class CompromissoService {
@@ -15,8 +20,32 @@ public class CompromissoService {
 	@Autowired
 	CompromissoRepository compromissoRepository;
 
-	public Compromisso criarCompromisso(Compromisso compromisso) {
-		compromisso.setStatus(Compromisso.Status.SOLICITADO);
+	@Autowired
+	ContatoRepository contatoRepository;
+
+	public Compromisso marcarCompromisso(CriarCompromissoDTO compromissoDTO, String emailCriador) {
+		Compromisso compromisso = CriarCompromissoDTO.from(compromissoDTO);
+		Optional<Contato> criador = contatoRepository.findByEmail(emailCriador);
+		List<Contato> participantes = new ArrayList<Contato>();
+		if (criador.isPresent()) {
+			compromisso.setCriador(criador.get());
+		} else {
+			throw new UnsupportedOperationException("Não foi possível encontrar o contato do criador.");
+		}
+		if (compromissoDTO.getParticipantes() == null) {
+			throw new UnsupportedOperationException("Não é possível criar um compromisso sem participantes.");
+		}
+		for (String emailParticipante : compromissoDTO.getParticipantes()) {
+			Optional<Contato> participante = contatoRepository.findByEmail(emailParticipante);
+			if (participante.isPresent()) {
+				participantes.add(participante.get());
+			} else {
+				throw new UnsupportedOperationException(
+						"Não foi possível encontrar o contato do participante " + emailParticipante + ".");
+			}
+		}
+		compromisso.setStatus(CompromissoStatus.SOLICITADO);
+		compromisso.setParticipantes(participantes);
 		return compromissoRepository.save(compromisso);
 	}
 
@@ -36,15 +65,15 @@ public class CompromissoService {
 		if (optionalCompromisso.isPresent()) {
 			Compromisso compromisso_ = optionalCompromisso.get();
 
-			if (compromisso_.getStatus() == Compromisso.Status.NEGADO
-					|| compromisso_.getStatus() == Compromisso.Status.CANCELADO) {
+			if (compromisso_.getStatus() == CompromissoStatus.NEGADO
+					|| compromisso_.getStatus() == CompromissoStatus.CANCELADO) {
 				throw new UnsupportedOperationException(
 						"Não é permitido editar compromissos com status NEGADO ou CANCELADO.");
 			}
 
 			if (!compromisso.getData().equals(compromisso_.getData())
 					&& !compromisso.getLocal().equals(compromisso_.getLocal())) {
-				compromisso.setStatus(Compromisso.Status.REAGENDADO);
+				compromisso.setStatus(CompromissoStatus.REAGENDADO);
 			} else {
 				compromisso.setStatus(compromisso_.getStatus());
 			}
@@ -65,8 +94,8 @@ public class CompromissoService {
 		if (optionalCompromisso.isPresent()) {
 			Compromisso compromissos = optionalCompromisso.get();
 
-			if (compromissos.getStatus() == Compromisso.Status.SOLICITADO) {
-				compromissos.setStatus(Compromisso.Status.ACEITO);
+			if (compromissos.getStatus() == CompromissoStatus.SOLICITADO) {
+				compromissos.setStatus(CompromissoStatus.ACEITO);
 				return compromissoRepository.save(compromissos);
 			} else {
 				throw new UnsupportedOperationException("Este compromisso não está em estado de solicitação.");
@@ -80,8 +109,8 @@ public class CompromissoService {
 		if (optionalCompromisso.isPresent()) {
 			Compromisso compromissos = optionalCompromisso.get();
 
-			if (compromissos.getStatus() == Compromisso.Status.SOLICITADO) {
-				compromissos.setStatus(Compromisso.Status.NEGADO);
+			if (compromissos.getStatus() == CompromissoStatus.SOLICITADO) {
+				compromissos.setStatus(CompromissoStatus.NEGADO);
 				return compromissoRepository.save(compromissos);
 			} else {
 				throw new UnsupportedOperationException("Este compromisso não está em estado de solicitação.");
@@ -95,8 +124,8 @@ public class CompromissoService {
 		if (optionalCompromisso.isPresent()) {
 			Compromisso compromissos = optionalCompromisso.get();
 
-			if (compromissos.getStatus() == Compromisso.Status.SOLICITADO) {
-				compromissos.setStatus(Compromisso.Status.CANCELADO);
+			if (compromissos.getStatus() == CompromissoStatus.SOLICITADO) {
+				compromissos.setStatus(CompromissoStatus.CANCELADO);
 				return compromissoRepository.save(compromissos);
 			} else {
 				throw new UnsupportedOperationException("Este compromisso não está em estado de solicitação.");

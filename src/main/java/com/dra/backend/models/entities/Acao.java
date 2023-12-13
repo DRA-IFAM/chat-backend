@@ -7,13 +7,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
+@Entity(name = "acao")
 @NoArgsConstructor
 public class Acao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
     private String descricao;
     @ManyToOne
     private Compromisso compromisso;
@@ -25,10 +24,11 @@ public class Acao {
     private Date dataRealizada;
 
     public Acao(Compromisso compromisso, Contato publicador,
-                String descricao, Date dataPlanejada) {
+            String descricao, Date dataPlanejada) {
         this.compromisso = compromisso;
         this.publicador = publicador;
         this.descricao = descricao;
         this.dataPlanejada = dataPlanejada;
     }
+
 }

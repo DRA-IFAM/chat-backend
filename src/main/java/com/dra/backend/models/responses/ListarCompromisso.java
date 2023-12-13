@@ -1,0 +1,31 @@
+package com.dra.backend.models.responses;
+
+import java.util.Date;
+import java.util.List;
+
+import com.dra.backend.models.entities.Compromisso;
+
+import lombok.Data;
+
+@Data
+public class ListarCompromisso {
+    String criador;
+    String titulo;
+    Date data;
+    String local;
+    String descricao;
+    List<String> participantes;
+
+    public static ListarCompromisso from(Compromisso compromisso) {
+        ListarCompromisso compromissoDTO = new ListarCompromisso();
+        compromissoDTO.setCriador(compromisso.getCriador().getNome());
+        compromissoDTO.setTitulo(compromisso.getTitulo());
+        compromissoDTO.setData(compromisso.getData());
+        compromissoDTO.setLocal(compromisso.getLocal());
+        compromissoDTO.setDescricao(compromisso.getDescricao());
+        compromissoDTO.setParticipantes(
+                compromisso.getParticipantes().stream().map(participante -> participante.getNome()).toList());
+        return compromissoDTO;
+    }
+
+}

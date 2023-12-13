@@ -1,9 +1,6 @@
 package com.dra.backend.models.entities;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.*;
 
 import jakarta.persistence.*;
 
@@ -12,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "compromise")
+@Table(name = "compromisso")
 public class Compromisso {
 
 	@Id
@@ -25,9 +22,8 @@ public class Compromisso {
 	@Column(nullable = false)
 	private String titulo;
 
-	@Column(nullable = false)
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-	private LocalDateTime data;
+	@Temporal(TemporalType.DATE)
+	private Date data;
 
 	@Column(nullable = false)
 	private String local;
@@ -39,10 +35,10 @@ public class Compromisso {
 	private List<Contato> participantes;
 
 	@Enumerated(EnumType.STRING)
-	private Status status;
+	private CompromissoStatus status;
 
-	public Compromisso(Long id, Contato criador, String titulo, LocalDateTime data, String local, String descricao,
-			List<Contato> participantes, Status status) {
+	public Compromisso(Long id, Contato criador, String titulo, Date data, String local, String descricao,
+			List<Contato> participantes, CompromissoStatus status) {
 		this.id = id;
 		this.criador = criador;
 		this.titulo = titulo;
@@ -53,7 +49,9 @@ public class Compromisso {
 		this.status = status;
 	}
 
-	public enum Status {
-		ACEITO, NEGADO, CANCELADO, SOLICITADO, REAGENDADO
+	@PrePersist
+	public void onPrePersist() {
+		this.status = CompromissoStatus.SOLICITADO;
 	}
+
 }
