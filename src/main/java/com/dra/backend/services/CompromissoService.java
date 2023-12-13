@@ -53,8 +53,9 @@ public class CompromissoService {
 		return compromissoRepository.findAll();
 	}
 
-	public Compromisso listaCompromisso(Long id) {
-		Optional<Compromisso> optionalCompromisso = compromissoRepository.findById(id);
+	public Compromisso listarMeusCompromissoPorId(Long id, String emailCriador) {
+		Optional<Compromisso> optionalCompromisso = compromissoRepository.findByIdAndCriadorEmail(id,
+				emailCriador);
 		if (optionalCompromisso.isPresent())
 			return optionalCompromisso.get();
 		return new Compromisso();

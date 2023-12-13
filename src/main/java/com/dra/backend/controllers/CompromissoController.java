@@ -21,7 +21,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Compromisso")
 @RestController
-@RequestMapping("/compromisso")
+@RequestMapping("api/compromisso")
 public class CompromissoController {
 
 	@Autowired
@@ -44,8 +44,8 @@ public class CompromissoController {
 	@Operation(summary = "Lista todos os compromissos.")
 	@ApiResponse(responseCode = "200", description = "Compromissos listados com sucesso.")
 	ResponseEntity<List<ListarCompromisso>> listaCompromissos() {
-		Optional<String> emailCriador = Optional.of(pegarEmailCriador());
-		List<Compromisso> compromissos = compromissoService.listaCompromissosPorCriador(emailCriador.get());
+		String emailCriador = pegarEmailCriador();
+		List<Compromisso> compromissos = compromissoService.listaCompromissosPorCriador(emailCriador);
 		List<ListarCompromisso> response = compromissos.stream().map(compromisso -> ListarCompromisso.from(compromisso))
 				.toList();
 		return ResponseEntity.ok(response);
@@ -54,8 +54,11 @@ public class CompromissoController {
 	@GetMapping("/{id}")
 	@Operation(summary = "Lista o compromisso pelo Id")
 	@ApiResponse(responseCode = "200", description = "Compromisso listado com sucesso.")
-	ResponseEntity<Compromisso> listaCompromissoPorId(@PathVariable Long id) {
-		return ResponseEntity.ok(compromissoService.listaCompromisso(id));
+	ResponseEntity<ListarCompromisso> listaCompromissoPorId(@PathVariable Long id) {
+		String emailCriador = pegarEmailCriador();
+		Compromisso compromisso = compromissoService.listarMeusCompromissoPorId(id, emailCriador);
+		ListarCompromisso response = ListarCompromisso.from(compromisso);
+		return ResponseEntity.ok(response);
 	}
 
 	@PutMapping("/{id}")

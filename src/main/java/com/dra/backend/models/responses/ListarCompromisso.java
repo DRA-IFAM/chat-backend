@@ -9,6 +9,7 @@ import lombok.Data;
 
 @Data
 public class ListarCompromisso {
+    Long id;
     String criador;
     String titulo;
     Date data;
@@ -18,6 +19,7 @@ public class ListarCompromisso {
 
     public static ListarCompromisso from(Compromisso compromisso) {
         ListarCompromisso compromissoDTO = new ListarCompromisso();
+        compromissoDTO.setId(compromisso.getId());
         compromissoDTO.setCriador(compromisso.getCriador().getNome());
         compromissoDTO.setTitulo(compromisso.getTitulo());
         compromissoDTO.setData(compromisso.getData());
