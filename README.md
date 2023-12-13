@@ -35,5 +35,15 @@ Basta acessar o endereço http://localhost:8080/h2-console no seu navegador.
 
 ## Desenvolvedores - Equipe 2
 
+- Alice Karolyn
+- Carlos Menezes
+- Davi Brenno
+- Gabriel Sotero
+- Isabelly Letícia
+- Jackellyne Lauana
+- João Pedro
+
+## Desenvolvedores - Equipe 3
+
 - X
 - X
