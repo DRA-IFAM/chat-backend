@@ -27,7 +27,7 @@ public class AcaoService {
     @Autowired
     private ContatoRepository contatoRepository;
 
-    public List<Acao> listarTodasAcoes(Long id) {
+    public List<Acao> listarAcoesPorCompromisso(Long id) {
         Compromisso compromisso = compromissoRepository.findById(id).get();
         return acaoRepository.findByCompromisso(compromisso);
     }

@@ -2,6 +2,7 @@ package com.dra.backend.controllers;
 
 import com.dra.backend.dto.acao.CriarAcaoDTO;
 import com.dra.backend.models.entities.Acao;
+import com.dra.backend.models.responses.ListarAcao;
 import com.dra.backend.services.AcaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,7 @@ public class AcaoController {
     @PostMapping("/{idCompromisso}")
     @Operation(summary = "Cria uma nova ação.")
     @ApiResponse(responseCode = "201", description = "Ação criada com sucesso.")
-    public ResponseEntity<List<Acao>> criarAcao(@RequestBody List<CriarAcaoDTO> acoesDTO,
+    public ResponseEntity<Void> criarAcao(@RequestBody List<CriarAcaoDTO> acoesDTO,
             @PathVariable Long idCompromisso) {
         for (CriarAcaoDTO acaoDTO : acoesDTO) {
             Optional<String> erro = CriarAcaoDTO.validarCampos(acaoDTO);
@@ -42,16 +43,19 @@ public class AcaoController {
         }
         String emailPublicador = pegarEmailDoToken();
         List<Acao> novaAcao = acaoService.criarAcao(acoesDTO, idCompromisso, emailPublicador);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novaAcao);
+        if (novaAcao == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.created(null).build();
     }
 
     @GetMapping("/{idCompromisso}")
     @Operation(summary = "Lista todas as ações.")
     @ApiResponse(responseCode = "200", description = "Ações listadas com sucesso.")
-    public ResponseEntity<List<Acao>> listarTodasAcoes(@PathVariable Long idCompromisso) {
-        List<Acao> acoes = acaoService.listarTodasAcoes(idCompromisso);
-        System.out.println(acoes);
-        return ResponseEntity.ok(acoes);
+    public ResponseEntity<List<ListarAcao>> ListarAcoes(@PathVariable Long idCompromisso) {
+        List<Acao> acoes = acaoService.listarAcoesPorCompromisso(idCompromisso);
+        List<ListarAcao> acoesDTO = acoes.stream().map(ListarAcao::from).toList();
+        return ResponseEntity.ok(acoesDTO);
     }
 
     // @GetMapping("/{id}")
