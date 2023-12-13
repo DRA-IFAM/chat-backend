@@ -2,6 +2,8 @@ package com.dra.backend.models.entities;
 
 import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 import lombok.*;
@@ -36,6 +38,10 @@ public class Compromisso {
 
 	@Enumerated(EnumType.STRING)
 	private CompromissoStatus status;
+
+	@JsonBackReference
+	@OneToMany(mappedBy = "compromisso")
+	private List<Acao> acoes;
 
 	public Compromisso(Long id, Contato criador, String titulo, Date data, String local, String descricao,
 			List<Contato> participantes, CompromissoStatus status) {

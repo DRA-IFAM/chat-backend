@@ -2,6 +2,8 @@ package com.dra.backend.models.entities;
 
 import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,8 +16,10 @@ public class Acao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String descricao;
+    @JsonManagedReference
     @ManyToOne
     private Compromisso compromisso;
+    @JsonManagedReference
     @ManyToOne
     private Contato publicador;
     @Temporal(TemporalType.DATE)
