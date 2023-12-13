@@ -63,15 +63,6 @@ public class AcaoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(novaAcao);
     }
     
-    @PutMapping("/{id}")
-    @Operation(summary = "Atualiza uma ação")
-    @ApiResponse(responseCode = "200", description = "Ação atualizada com sucesso.")
-    @ApiResponse(responseCode = "404", description = "Ação não encontrada.")
-    public ResponseEntity<Acao> atualizarAcao(@PathVariable Long id, Acao acao) {
-    	return ResponseEntity.status(HttpStatus.ACCEPTED).body(acaoService.atualizarAcao(id, acao));
-    	
-    }
-    
     @DeleteMapping("/{id}")
     @Operation(summary = "Deleta uma ação pelo ID.")
     @ApiResponse(responseCode = "204", description = "Ação deletada com sucesso.")
