@@ -1,13 +1,19 @@
 package com.dra.backend.controllers;
 
 import com.dra.backend.models.entities.Acao;
+import com.dra.backend.models.entities.Compromisso;
+import com.dra.backend.models.entities.Contato;
 import com.dra.backend.services.AcaoService;
+import com.dra.backend.services.CompromissoService;
+import com.dra.backend.services.ContatoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,6 +30,12 @@ public class AcaoController {
 
     @Autowired
     private AcaoService acaoService;
+
+    @Autowired
+    private CompromissoService compromissoService;
+
+    @Autowired
+    private ContatoService contatoService;
 
     @GetMapping
     @Operation(summary = "Lista todas as ações.")
@@ -62,4 +74,29 @@ public class AcaoController {
         return ResponseEntity.noContent().build();
     }
 
-}
+    @PutMapping("/{id}")
+    public ResponseEntity<Acao> atualizarAcao(@PathVariable Long id, @RequestBody Acao dadosAtualizados) {
+        Acao acaoAtualizada = acaoService.atualizarAcao(id, dadosAtualizados);
+        if (acaoAtualizada == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(acaoAtualizada);
+
+
+    }
+
+    @GetMapping("/data-planejada")
+    public ResponseEntity<List<Acao>> buscarAcoesPorDataPlanejada(@RequestParam Date dataPlanejada) {
+        List<Acao> acoes = acaoService.buscarAcoesPorDataPlanejada(dataPlanejada);
+        return ResponseEntity.ok(acoes);
+    }
+
+    @GetMapping("/data-realizada")
+    public ResponseEntity<List<Acao>> buscarAcoesPorDataRealizada(@RequestParam Date dataRealizada) {
+        List<Acao> acoes = acaoService.buscarAcoesPorDataRealizada(dataRealizada);
+        return ResponseEntity.ok(acoes);
+    }
+
+    }
+
+

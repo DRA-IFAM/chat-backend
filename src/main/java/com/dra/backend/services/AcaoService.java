@@ -1,11 +1,13 @@
 package com.dra.backend.services;
 
 import com.dra.backend.models.entities.Acao;
+import com.dra.backend.models.entities.Compromisso;
 import com.dra.backend.models.entities.Contato;
 import com.dra.backend.persistency.AcaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +52,17 @@ public class AcaoService {
         return false;
     }
 
+    public List<Acao> buscarAcoesPorDataPlanejada(Date dataPlanejada) {
+        return acaoRepository.findByDataPlanejada(dataPlanejada);
+    }
+
+    public List<Acao> buscarAcoesPorDataRealizada(Date dataRealizada) {
+        return acaoRepository.findByDataRealizada(dataRealizada);
+    }
+
+    public List<Acao> buscarAcoesPorCompromisso(Compromisso compromisso) {
+        return acaoRepository.findByCompromisso(compromisso);
+    }
 
     public List<Acao> buscarAcoesPorPublicador(Contato publicador) {
         return acaoRepository.findByPublicador(publicador);
