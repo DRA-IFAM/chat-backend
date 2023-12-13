@@ -16,19 +16,19 @@ public class Acao {
     @Column(nullable = false)
     private String descricao;
     @ManyToOne
+    private Compromisso compromisso;
+    @ManyToOne
     private Contato publicador;
     @Temporal(TemporalType.DATE)
     private Date dataPlanejada;
     @Temporal(TemporalType.DATE)
     private Date dataRealizada;
 
-    public Acao(Contato publicador, String descricao) {
+    public Acao(Compromisso compromisso, Contato publicador,
+                String descricao, Date dataPlanejada) {
+        this.compromisso = compromisso;
         this.publicador = publicador;
         this.descricao = descricao;
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        dataRealizada = new Date(); dataPlanejada = new Date();
+        this.dataPlanejada = dataPlanejada;
     }
 }
