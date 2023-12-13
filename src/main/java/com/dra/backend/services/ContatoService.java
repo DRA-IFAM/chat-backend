@@ -38,4 +38,5 @@ public class ContatoService {
         contatoRepository.delete(contato.get());
         return contato;
     }
+
 }
