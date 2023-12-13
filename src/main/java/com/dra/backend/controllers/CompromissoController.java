@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.dra.backend.dto.compromisso.CriarCompromissoDTO;
 import com.dra.backend.models.entities.Compromisso;
+import com.dra.backend.models.entities.CompromissoStatus;
 import com.dra.backend.models.responses.ListarCompromisso;
 import com.dra.backend.services.CompromissoService;
 
@@ -35,7 +36,7 @@ public class CompromissoController {
 		if (error.isPresent()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error.get());
 		}
-		String emailCriador = pegarEmailCriador();
+		String emailCriador = pegarEmailDoToken();
 		compromissoService.marcarCompromisso(compromissoDTO, emailCriador);
 		return ResponseEntity.status(HttpStatus.CREATED).body("Compromisso criado com sucesso.");
 	}
@@ -44,7 +45,7 @@ public class CompromissoController {
 	@Operation(summary = "Lista todos os compromissos.")
 	@ApiResponse(responseCode = "200", description = "Compromissos listados com sucesso.")
 	ResponseEntity<List<ListarCompromisso>> listaCompromissos() {
-		String emailCriador = pegarEmailCriador();
+		String emailCriador = pegarEmailDoToken();
 		List<Compromisso> compromissos = compromissoService.listaCompromissosPorCriador(emailCriador);
 		List<ListarCompromisso> response = compromissos.stream().map(compromisso -> ListarCompromisso.from(compromisso))
 				.toList();
@@ -55,7 +56,7 @@ public class CompromissoController {
 	@Operation(summary = "Lista o compromisso pelo Id")
 	@ApiResponse(responseCode = "200", description = "Compromisso listado com sucesso.")
 	ResponseEntity<ListarCompromisso> listaCompromissoPorId(@PathVariable Long id) {
-		String emailCriador = pegarEmailCriador();
+		String emailCriador = pegarEmailDoToken();
 		Compromisso compromisso = compromissoService.listarMeusCompromissoPorId(id, emailCriador);
 		if (compromisso == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ListarCompromisso());
@@ -82,7 +83,7 @@ public class CompromissoController {
 	@Operation(summary = "Exclui um compromisso.")
 	@ApiResponse(responseCode = "200", description = "Compromisso excluído com sucesso.")
 	ResponseEntity<Void> excluirCompromisso(@PathVariable Long id) {
-		String emailCriador = pegarEmailCriador();
+		String emailCriador = pegarEmailDoToken();
 		Compromisso compromisso = compromissoService.excluirCompromisso(id, emailCriador);
 		if (compromisso == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -90,46 +91,19 @@ public class CompromissoController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@PostMapping("/aceitar/{id}")
-	@Operation(summary = "Aceita um compromisso.")
+	@PostMapping("/responder/{id}")
+	@Operation(summary = "Aceita / nega / cancela um compromisso.")
 	@ApiResponse(responseCode = "200", description = "Compromisso aceito com sucesso.")
-	ResponseEntity<Compromisso> aceitarCompromisso(@PathVariable Long id) {
-		try {
-			return ResponseEntity.ok(compromissoService.aceitarCompromisso(id));
-		} catch (UnsupportedOperationException e) {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Compromisso());
+	ResponseEntity<Void> aceitarCompromisso(@PathVariable Long id, @RequestBody CompromissoStatus status) {
+		String emailParticipante = pegarEmailDoToken();
+		Compromisso compromisso = compromissoService.responderCompromisso(id, status, emailParticipante);
+		if (compromisso == null) {
+			return ResponseEntity.notFound().build();
 		}
+		return ResponseEntity.ok().build();
 	}
 
-	@PostMapping("/negar/{id}")
-	@Operation(summary = "Nega um compromisso.")
-	@ApiResponse(responseCode = "200", description = "Compromisso negado com sucesso.")
-	ResponseEntity<Compromisso> negarCompromisso(@PathVariable Long id) {
-		try {
-			return ResponseEntity.ok(compromissoService.negarCompromisso(id));
-		} catch (UnsupportedOperationException e) {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Compromisso());
-		}
-	}
-
-	@PutMapping("/cancelar/{id}")
-	@Operation(summary = "Cancela um compromisso.")
-	@ApiResponse(responseCode = "200", description = "Compromisso cancelado com sucesso.")
-	ResponseEntity<Compromisso> cancelarCompromisso(@PathVariable Long id) {
-		try {
-			return ResponseEntity.ok(compromissoService.cancelarCompromisso(id));
-		} catch (UnsupportedOperationException e) {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Compromisso());
-		}
-	}
-
-	private String pegarEmailCriador() {
+	private String pegarEmailDoToken() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		return authentication.getName();
 	}

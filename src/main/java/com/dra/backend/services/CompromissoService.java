@@ -94,48 +94,23 @@ public class CompromissoService {
 		return compromisso;
 	}
 
-	public Compromisso aceitarCompromisso(Long id) {
-		Optional<Compromisso> optionalCompromisso = compromissoRepository.findById(id);
+	public Compromisso responderCompromisso(Long id, CompromissoStatus status, String emailParticipante) {
+		Optional<Compromisso> optionalCompromisso = compromissoRepository.findByIdAndParticipantesEmail(id,
+				emailParticipante);
+		if (!optionalCompromisso.isPresent()) {
+			return null;
+		}
 		if (optionalCompromisso.isPresent()) {
 			Compromisso compromissos = optionalCompromisso.get();
-
 			if (compromissos.getStatus() == CompromissoStatus.SOLICITADO) {
-				compromissos.setStatus(CompromissoStatus.ACEITO);
+				compromissos.setStatus(status);
 				return compromissoRepository.save(compromissos);
 			} else {
 				throw new UnsupportedOperationException("Este compromisso não está em estado de solicitação.");
 			}
+
 		}
 		return new Compromisso();
 	}
 
-	public Compromisso negarCompromisso(Long id) {
-		Optional<Compromisso> optionalCompromisso = compromissoRepository.findById(id);
-		if (optionalCompromisso.isPresent()) {
-			Compromisso compromissos = optionalCompromisso.get();
-
-			if (compromissos.getStatus() == CompromissoStatus.SOLICITADO) {
-				compromissos.setStatus(CompromissoStatus.NEGADO);
-				return compromissoRepository.save(compromissos);
-			} else {
-				throw new UnsupportedOperationException("Este compromisso não está em estado de solicitação.");
-			}
-		}
-		return new Compromisso();
-	}
-
-	public Compromisso cancelarCompromisso(Long id) {
-		Optional<Compromisso> optionalCompromisso = compromissoRepository.findById(id);
-		if (optionalCompromisso.isPresent()) {
-			Compromisso compromissos = optionalCompromisso.get();
-
-			if (compromissos.getStatus() == CompromissoStatus.SOLICITADO) {
-				compromissos.setStatus(CompromissoStatus.CANCELADO);
-				return compromissoRepository.save(compromissos);
-			} else {
-				throw new UnsupportedOperationException("Este compromisso não está em estado de solicitação.");
-			}
-		}
-		return new Compromisso();
-	}
 }
