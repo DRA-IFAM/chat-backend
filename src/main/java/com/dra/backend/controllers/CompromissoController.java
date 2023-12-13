@@ -94,7 +94,7 @@ public class CompromissoController {
 	@PostMapping("/responder/{id}")
 	@Operation(summary = "Aceita / nega / cancela um compromisso.")
 	@ApiResponse(responseCode = "200", description = "Compromisso aceito com sucesso.")
-	ResponseEntity<Void> aceitarCompromisso(@PathVariable Long id, @RequestBody CompromissoStatus status) {
+	ResponseEntity<Void> statusCompromisso(@PathVariable Long id, @RequestBody CompromissoStatus status) {
 		String emailParticipante = pegarEmailDoToken();
 		Compromisso compromisso = compromissoService.responderCompromisso(id, status, emailParticipante);
 		if (compromisso == null) {

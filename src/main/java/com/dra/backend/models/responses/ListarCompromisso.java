@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.dra.backend.models.entities.Compromisso;
+import com.dra.backend.models.entities.CompromissoStatus;
 
 import lombok.Data;
 
@@ -16,6 +17,7 @@ public class ListarCompromisso {
     String local;
     String descricao;
     List<String> participantes;
+    CompromissoStatus status;
 
     public static ListarCompromisso from(Compromisso compromisso) {
         ListarCompromisso compromissoDTO = new ListarCompromisso();
@@ -27,6 +29,7 @@ public class ListarCompromisso {
         compromissoDTO.setDescricao(compromisso.getDescricao());
         compromissoDTO.setParticipantes(
                 compromisso.getParticipantes().stream().map(participante -> participante.getNome()).toList());
+        compromissoDTO.setStatus(compromisso.getStatus());
         return compromissoDTO;
     }
 
