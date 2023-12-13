@@ -4,7 +4,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.dra.backend.configs.SingleValueToListDeserializer;
 import com.dra.backend.models.entities.Compromisso;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import lombok.Data;
 
@@ -14,6 +16,7 @@ public class CriarCompromissoDTO {
     Date data;
     String local;
     String descricao;
+    @JsonDeserialize(using = SingleValueToListDeserializer.class)
     List<String> participantes;
 
     public static Optional<String> validarCampos(CriarCompromissoDTO compromissoDTO) {
@@ -25,8 +28,10 @@ public class CriarCompromissoDTO {
             return Optional.of("O local não pode ser vazio.");
         if (compromissoDTO.getDescricao() == null || compromissoDTO.getDescricao().isEmpty())
             return Optional.of("A descrição não pode ser vazia.");
-        if (compromissoDTO.getParticipantes() == null || compromissoDTO.getParticipantes().isEmpty())
+
+        if (compromissoDTO.getParticipantes().isEmpty())
             return Optional.of("O compromisso deve ter pelo menos um participante.");
+
         return Optional.empty();
     }
 
