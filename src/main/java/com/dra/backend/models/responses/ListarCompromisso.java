@@ -22,13 +22,13 @@ public class ListarCompromisso {
     public static ListarCompromisso from(Compromisso compromisso) {
         ListarCompromisso compromissoDTO = new ListarCompromisso();
         compromissoDTO.setId(compromisso.getId());
-        compromissoDTO.setCriador(compromisso.getCriador().getNome());
+        compromissoDTO.setCriador(compromisso.getCriador().getEmail());
         compromissoDTO.setTitulo(compromisso.getTitulo());
         compromissoDTO.setData(compromisso.getData());
         compromissoDTO.setLocal(compromisso.getLocal());
         compromissoDTO.setDescricao(compromisso.getDescricao());
         compromissoDTO.setParticipantes(
-                compromisso.getParticipantes().stream().map(participante -> participante.getNome()).toList());
+                compromisso.getParticipantes().stream().map(participante -> participante.getEmail()).toList());
         compromissoDTO.setStatus(compromisso.getStatus());
         return compromissoDTO;
     }
